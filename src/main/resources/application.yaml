@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: user-service
+
+  # datasource details
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_service_db
+    username: root
+    password: root
+
+#    # Configure JPA/Hibernate to auto drop and then create the table, should not be using in prod env
+#    jpa:
+#      hibernate:
+#        ddl-auto: update

@@ -1,11 +1,12 @@
 package com.theinfinity007.user_service.controller;
 
 import com.theinfinity007.user_service.dto.UserCreateRequestDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/users")
-public class User {
+public class UserController {
 
     @GetMapping("")
     public String getUser() {
@@ -13,8 +14,8 @@ public class User {
     }
 
     @PostMapping("")
-    public String signup(@RequestBody UserCreateRequestDto userCreateRequestDto) {
+    public ResponseEntity<UserCreateRequestDto> signup(@RequestBody UserCreateRequestDto userCreateRequestDto) {
         System.out.println("userCreateRequestDto = " + userCreateRequestDto);
-        return "success";
+        return ResponseEntity.ok(userCreateRequestDto);
     }
 }
