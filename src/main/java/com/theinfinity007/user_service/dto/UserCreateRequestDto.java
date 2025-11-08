@@ -1,26 +1,27 @@
 package com.theinfinity007.user_service.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 public class UserCreateRequestDto {
-    @NotNull
-    @NotBlank
+
+    @NotBlank(message = "is required and must not be blank")
     private String email;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "is required and must not be blank")
     private String password;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "is required and must not be blank")
     private String firstName;
     private String lastName;
     private String gender;
     private String title;
     private String birthday;
+
+    // validation group interfaces
+    public interface First {}
+    public interface Second {}
 }
