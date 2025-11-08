@@ -8,7 +8,12 @@ spring:
     username: root
     password: root
 
-#    # Configure JPA/Hibernate to auto drop and then create the table, should not be using in prod env
-#    jpa:
+
+    jpa:
+      properties:
+        hibernate:
+          # Format SQL queries for readability
+          format_sql: true
 #      hibernate:
+          # Configure JPA/Hibernate to auto drop and then create the table, should not be using in prod env
 #        ddl-auto: update
