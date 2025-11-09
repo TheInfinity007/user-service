@@ -2,8 +2,10 @@ package com.theinfinity007.user_service.service;
 
 import com.theinfinity007.user_service.dao.UserDAO;
 import com.theinfinity007.user_service.entity.User;
+import com.theinfinity007.user_service.exception.UserAlreadyExistsException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,16 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void create(User user) {
-        userDAO.create(user);
+
+        try {
+            userDAO.create(user);
+        } catch (DataIntegrityViolationException e) {
+
+            if(e.getMessage().contains("idx_email")){
+                throw new UserAlreadyExistsException(user.getEmail());
+            }
+
+            throw new IllegalStateException("Unable to create user due to data constraint violatoin", e);
+        }
     }
 }
