@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 public class UserCreateRequestDto {
@@ -19,7 +21,7 @@ public class UserCreateRequestDto {
     private String lastName;
     private String gender;
     private String title;
-    private String birthday;
+    private LocalDate birthday;
 
     // validation group interfaces
     public interface First {}

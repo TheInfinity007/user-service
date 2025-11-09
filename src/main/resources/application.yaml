@@ -9,11 +9,33 @@ spring:
     password: root
 
 
-    jpa:
-      properties:
-        hibernate:
-          # Format SQL queries for readability
-          format_sql: true
-#      hibernate:
-          # Configure JPA/Hibernate to auto drop and then create the table, should not be using in prod env
-#        ddl-auto: update
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        # Format SQL queries for readability
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+        # Configure JPA/Hibernate to control the database schema, possible values: create,create-drop,update,validate,none
+      ddl-auto: update
+
+# Display spring-bott-actuator in swagger
+springdoc:
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans, mappings
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: "User Service"
+    description: "User Service API"
+    version: "1.0.0"
+

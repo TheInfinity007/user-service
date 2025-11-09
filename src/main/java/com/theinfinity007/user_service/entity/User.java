@@ -1,12 +1,14 @@
 package com.theinfinity007.user_service.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 @Entity
-@Table(name = "User")
-public class UserEntity {
+@Table(name = "users")
+public class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
