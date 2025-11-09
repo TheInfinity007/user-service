@@ -16,10 +16,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void create(User user) {
+    public User create(User user) {
 
         try {
-            userDAO.create(user);
+           return userDAO.create(user);
         } catch (DataIntegrityViolationException e) {
 
             if(e.getMessage().contains("idx_email")){

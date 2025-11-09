@@ -1,10 +1,14 @@
 package com.theinfinity007.user_service.controller;
 
 import com.theinfinity007.user_service.dto.UserCreateRequestDto;
+import com.theinfinity007.user_service.dto.UserResponseDto;
 import com.theinfinity007.user_service.entity.User;
+import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
+import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
 import com.theinfinity007.user_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,20 +25,14 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<User> signup(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
-        System.out.println("userCreateRequestDto = " + userCreateRequestDto);
+    public ResponseEntity<UserResponseDto> signup(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
 
-        User user = new User();
-        user.setEmail(userCreateRequestDto.getEmail());
-        user.setPassword(userCreateRequestDto.getPassword());
-        user.setFirstName(userCreateRequestDto.getFirstName());
-        user.setLastName(userCreateRequestDto.getLastName());
-        user.setBirthday(userCreateRequestDto.getBirthday());
-        user.setGender(userCreateRequestDto.getGender());
-        user.setTitle(userCreateRequestDto.getTitle());
+        User user = UserRequestMapper.populate(userCreateRequestDto);
 
-        userService.create(user);
+        User createdUser = userService.create(user);
 
-        return ResponseEntity.ok(user);
+        UserResponseDto response = UserResponseMapper.populate(createdUser);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

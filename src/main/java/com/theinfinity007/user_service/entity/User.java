@@ -2,8 +2,10 @@ package com.theinfinity007.user_service.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -36,4 +38,10 @@ public class User {
 
     @Column(name = "birthday")
     private LocalDate birthday;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @Version
+    private Long version;
 }
