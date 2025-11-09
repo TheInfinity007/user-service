@@ -1,5 +1,6 @@
 package com.theinfinity007.user_service.exception.handler;
 
+import com.theinfinity007.user_service.dto.ErrorResponseDto;
 import com.theinfinity007.user_service.exception.UserServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,9 @@ import java.util.Map;
 public class DefaultExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponseDto> handleValidationErrors(MethodArgumentNotValidException ex) {
 
-        String errorMessage = "";
+        String errorMessage = ex.getMessage();
 
         for(ObjectError error: ex.getBindingResult().getAllErrors()){
             String fieldName =((FieldError) error).getField();
@@ -29,21 +30,17 @@ public class DefaultExceptionHandler {
             break;
         }
 
-        Map<String, Object> response  = new HashMap<>();
-        response.put("statusCode", HttpStatus.BAD_REQUEST.value());
-        response.put("message", errorMessage);
-        response.put("timestamp", Instant.now().truncatedTo(ChronoUnit.MILLIS).toString());
-        response.put("errorCode", "Bad Request");
-        return ResponseEntity.badRequest().body(response);
+        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+        ErrorResponseDto response = new ErrorResponseDto(statusCode, HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage, timestamp);
+        return ResponseEntity.status(statusCode).body(response);
     }
 
     @ExceptionHandler(UserServiceException.class)
     public ResponseEntity<?> handleUserServiceException(UserServiceException ex){
-        Map<String, Object> response = new HashMap<>();
-        response.put("statusCode", ex.getStatusCode());
-        response.put("message", ex.getMessage());
-        response.put("timestamp", Instant.now().truncatedTo(ChronoUnit.MILLIS).toString());
-        response.put("errorCode", ex.getErrorCode());
+
+        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        ErrorResponseDto response = new ErrorResponseDto(ex.getStatusCode(), ex.getErrorCode(), ex.getMessage(), timestamp);
 
         return ResponseEntity.status(ex.getStatusCode()).body(response);
     }
