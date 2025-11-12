@@ -22,8 +22,4 @@ public class UserCreateRequestDto {
     private String gender;
     private String title;
     private LocalDate birthday;
-
-    // validation group interfaces
-    public interface First {}
-    public interface Second {}
 }

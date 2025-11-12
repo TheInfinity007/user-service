@@ -17,4 +17,5 @@ public class UserResponseDto {
     private String gender;
     private LocalDate birthday;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

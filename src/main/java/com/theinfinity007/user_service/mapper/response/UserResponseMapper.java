@@ -15,6 +15,7 @@ public class UserResponseMapper {
         userResponseDto.setBirthday(user.getBirthday());
         userResponseDto.setTitle(user.getTitle());
         userResponseDto.setCreatedAt(user.getCreatedAt());
+        userResponseDto.setModifiedAt(user.getModifiedAt());
 
         return userResponseDto;
     }
