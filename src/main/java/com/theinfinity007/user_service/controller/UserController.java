@@ -7,6 +7,7 @@ import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
 import com.theinfinity007.user_service.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+    private final UserRequestMapper userRequestMapper;
 
     @GetMapping("")
     public String getUser() {
@@ -27,7 +29,7 @@ public class UserController {
     @PostMapping("")
     public ResponseEntity<UserResponseDto> signup(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
 
-        User user = UserRequestMapper.populate(userCreateRequestDto);
+        User user = userRequestMapper.populate(userCreateRequestDto);
 
         User createdUser = userService.create(user);
 
