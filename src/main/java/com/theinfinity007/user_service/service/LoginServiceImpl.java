@@ -1,10 +1,15 @@
 package com.theinfinity007.user_service.service;
 
+import com.theinfinity007.user_service.dto.JWTResponse;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.exception.InvalidEmailorPasswordException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
@@ -12,12 +17,13 @@ public class LoginServiceImpl implements LoginService {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final OAuthTokenService oAuthTokenService;
 
     private final String emailClaim = "email";
     private final String idClaim = "id";
 
     @Override
-    public void login(String email, String password) {
+    public JWTResponse login(String email, String password) {
         User user = userService.findByEmail(email);
 
         if (user.getPassword() == null) {
@@ -28,6 +34,11 @@ public class LoginServiceImpl implements LoginService {
         if (!isValid) {
             throw new InvalidEmailorPasswordException();
         }
+
+        Map<String, String> payload = new HashMap<>();
+        payload.put(emailClaim, email);
+
+        return oAuthTokenService.generateToken(payload, user.getId());
     }
 
     private boolean validatePassword(String hashedPassword, String password) {

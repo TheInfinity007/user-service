@@ -1,5 +1,6 @@
 package com.theinfinity007.user_service.controller;
 
+import com.theinfinity007.user_service.dto.JWTResponse;
 import com.theinfinity007.user_service.dto.UserCreateRequestDto;
 import com.theinfinity007.user_service.dto.UserResponseDto;
 import com.theinfinity007.user_service.dto.UserLoginRequestDto;
@@ -13,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/v1/users")
@@ -45,13 +45,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto){
+    public JWTResponse login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto){
 
         String email = userLoginRequestDto.getEmail();
         String password = userLoginRequestDto.getPassword();
 
-        loginService.login(email, password);
+        JWTResponse jwtResponse = loginService.login(email, password);
 
-        return "HI";
+        return jwtResponse;
     }
 }
