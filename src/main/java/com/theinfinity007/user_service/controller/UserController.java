@@ -21,9 +21,12 @@ public class UserController {
     private final UserService userService;
     private final UserRequestMapper userRequestMapper;
 
-    @GetMapping("")
-    public String getUser() {
-        return "hi users";
+    @GetMapping("/{email}")
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+
+        UserResponseDto response = UserResponseMapper.populate(user);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("")

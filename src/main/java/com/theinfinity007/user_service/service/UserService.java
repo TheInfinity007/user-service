@@ -4,4 +4,6 @@ import com.theinfinity007.user_service.entity.User;
 
 public interface UserService {
     User create(User user);
+
+    User findByEmail(String email);
 }

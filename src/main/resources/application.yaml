@@ -10,7 +10,7 @@ spring:
 
 
   jpa:
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate:
         # Format SQL queries for readability
@@ -38,4 +38,13 @@ info:
     name: "User Service"
     description: "User Service API"
     version: "1.0.0"
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
 
