@@ -26,7 +26,8 @@ public class LoginServiceImpl implements LoginService {
     public JWTResponse login(String email, String password) {
         User user = userService.findByEmail(email);
 
-        if (user.getPassword() == null) {
+
+        if (user == null || user.getPassword() == null) {
             throw new InvalidEmailorPasswordException();
         }
 
@@ -35,7 +36,7 @@ public class LoginServiceImpl implements LoginService {
             throw new InvalidEmailorPasswordException();
         }
 
-        Map<String, String> payload = new HashMap<>();
+        Map<String, Object> payload = new HashMap<>();
         payload.put(emailClaim, email);
 
         return oAuthTokenService.generateToken(payload, user.getId());

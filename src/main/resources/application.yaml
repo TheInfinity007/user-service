@@ -51,4 +51,5 @@ logging:
 jwt:
   secret: "556e19c172530255c55c001dc574032499f13b19725263548e552e5a385fa95a"
   expiry: 86400
+  issuer: "https://theinfinity007.github.io"
 

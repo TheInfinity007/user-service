@@ -10,10 +10,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OauthTokenServiceImpl implements OAuthTokenService{
 
-    private final TokenProvider tokenProvider;
+    private final TokenProviderImpl tokenProvider;
 
     @Override
-    public JWTResponse generateToken(Map<String, String> payload, Long id) {
+    public JWTResponse generateToken(Map<String, Object> payload, Long id) {
 
         JWTResponse result = tokenProvider.signJWT(payload, id.toString());
 

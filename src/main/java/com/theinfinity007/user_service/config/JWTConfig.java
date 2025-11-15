@@ -17,4 +17,7 @@ public class JWTConfig {
     @Value("${jwt.expiry}")
     private Long jwtExpiry;
 
+    @Value("${jwt.issuer}")
+    private String jwtIssuer;
+
 }
