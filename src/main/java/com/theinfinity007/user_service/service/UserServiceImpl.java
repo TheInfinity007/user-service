@@ -40,4 +40,15 @@ public class UserServiceImpl implements UserService{
         }
         return user;
     }
+
+    @Override
+    public User findById(Long id) {
+        User user = userDAO.findById(id);
+
+        if (user == null) {
+            throw new UserNotFoundException(id);
+        }
+
+        return user;
+    }
 }

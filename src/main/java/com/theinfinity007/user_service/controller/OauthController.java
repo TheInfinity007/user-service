@@ -1,0 +1,32 @@
+package com.theinfinity007.user_service.controller;
+
+import com.theinfinity007.user_service.dto.JWTResponse;
+import com.theinfinity007.user_service.dto.RefreshTokenRequestDto;
+import com.theinfinity007.user_service.service.TokenService;
+import com.theinfinity007.user_service.utils.CommonUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/v1/oauth")
+public class OauthController {
+
+    private final TokenService tokenService;
+
+    @PostMapping("/token")
+    public ResponseEntity<JWTResponse> refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request){
+
+        String clientIp = CommonUtil.getClientIPAddress(headers.get("x-forwarded-for"), request);
+
+        String token = refreshTokenRequestDto.getToken();
+
+        JWTResponse jwtResponse = tokenService.refreshToken(token, clientIp);
+
+        return ResponseEntity.ok().body(jwtResponse);
+    }
+}

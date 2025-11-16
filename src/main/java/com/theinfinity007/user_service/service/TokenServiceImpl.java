@@ -5,9 +5,10 @@ import com.theinfinity007.user_service.dto.JWTResponse;
 import com.theinfinity007.user_service.entity.Token;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.enums.TokenType;
+import com.theinfinity007.user_service.exception.RefreshTokenNotFoundException;
+import com.theinfinity007.user_service.utils.CommonUtil;
 import com.theinfinity007.user_service.utils.CryptoUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +20,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    private final JWTTokenProviderImpl tokenProvider;
+    private final JWTTokenProvider tokenProvider;
     private final TokenDAO tokenDAO;
+    private final UserService userService;
     private final int REFRESH_TOKEN_LENGTH = 45;
-    private final PasswordEncoder passwordEncoder;
+
+    private String getRefreshTokenHash(String refreshToken) {
+        return CryptoUtil.getHash(refreshToken);
+    }
 
     @Override
+    @Transactional
     public JWTResponse generateToken(Map<String, Object> payload, User user, String ip) {
 
         JWTResponse result = tokenProvider.signJWT(payload, user.getId().toString());
@@ -32,7 +38,7 @@ public class TokenServiceImpl implements TokenService {
         String refreshToken = CryptoUtil.getRandomString(REFRESH_TOKEN_LENGTH);
         result.setRefreshToken(refreshToken);
 
-        String refreshTokenHash = passwordEncoder.encode(refreshToken);
+        String refreshTokenHash = getRefreshTokenHash(refreshToken);
 
         Token token = new Token();
         token.setToken(refreshTokenHash);
@@ -46,11 +52,53 @@ public class TokenServiceImpl implements TokenService {
         return result;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Token create(Token token) {
-        return tokenDAO.create(token);
+        token =  tokenDAO.create(token);
+        return token;
     }
+
+    @Override
+    @Transactional
+    public JWTResponse refreshToken(String refreshToken, String ip) {
+        Token token = this.findByRefreshToken(refreshToken);
+        User user = userService.findById(token.getUser().getId());
+
+        Map<String, Object> payload = CommonUtil.prepareTokenPayload(user);
+
+        JWTResponse jwtResponse = tokenProvider.signJWT(payload, user.getId().toString());
+        jwtResponse.setRefreshToken(refreshToken);
+
+        token.setAccessCount(token.getAccessCount() + 1);
+        token.setAccessedAt(Date.from(Instant.now()));
+        token.setIp(ip);
+
+        this.save(token);
+
+        return jwtResponse;
+    }
+
+    private Token findByRefreshToken(String refreshToken) {
+        String refreshTokenHash = getRefreshTokenHash(refreshToken);
+
+        Token token = tokenDAO.findByToken(refreshTokenHash);
+        if (token == null) {
+            throw new RefreshTokenNotFoundException();
+        }
+
+        return token;
+    }
+
+
+    @Override
+    public Token save(Token token) {
+        return tokenDAO.save(token);
+    }
+
+
+
+
 
 
 }
