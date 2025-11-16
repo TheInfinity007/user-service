@@ -17,13 +17,12 @@ public class LoginServiceImpl implements LoginService {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final OAuthTokenService oAuthTokenService;
+    private final TokenService tokenService;
 
     private final String emailClaim = "email";
-    private final String idClaim = "id";
 
     @Override
-    public JWTResponse login(String email, String password) {
+    public JWTResponse login(String email, String password, String ip) {
         User user = userService.findByEmail(email);
 
 
@@ -39,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
         Map<String, Object> payload = new HashMap<>();
         payload.put(emailClaim, email);
 
-        return oAuthTokenService.generateToken(payload, user.getId());
+        return tokenService.generateToken(payload, user, ip);
     }
 
     private boolean validatePassword(String hashedPassword, String password) {

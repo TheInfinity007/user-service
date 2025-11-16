@@ -15,7 +15,6 @@ spring:
       hibernate:
         # Format SQL queries for readability
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
         # Configure JPA/Hibernate to control the database schema, possible values: create,create-drop,update,validate,none
       ddl-auto: update

@@ -50,7 +50,7 @@ public class UserController {
         String email = userLoginRequestDto.getEmail();
         String password = userLoginRequestDto.getPassword();
 
-        JWTResponse jwtResponse = loginService.login(email, password);
+        JWTResponse jwtResponse = loginService.login(email, password, "168.0.0.1");
 
         return jwtResponse;
     }

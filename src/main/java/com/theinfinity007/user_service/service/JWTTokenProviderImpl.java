@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-public class TokenProviderImpl implements TokenProvider{
+public class JWTTokenProviderImpl implements JWTTokenProvider {
 
     private final JWTConfig jwtConfig;
 
-    public TokenProviderImpl(JWTConfig jwtConfig) {
+    public JWTTokenProviderImpl(JWTConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
     }
 
