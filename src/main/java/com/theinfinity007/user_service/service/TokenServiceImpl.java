@@ -36,6 +36,7 @@ public class TokenServiceImpl implements TokenService {
         token.setUser(user);
         token.setLastUsedAt(Date.from(Instant.now()));
         token.setAccessCount(0);
+        token.setIp(ip);
 
         this.create(token);
         return result;

@@ -31,4 +31,7 @@ public class Token extends BaseEntity {
 
     @Column(name = "access_count")
     private int accessCount;
+
+    @Column(name = "ip")
+    private String ip;
 }

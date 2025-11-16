@@ -9,8 +9,11 @@ import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
 import com.theinfinity007.user_service.service.LoginService;
 import com.theinfinity007.user_service.service.UserService;
+import com.theinfinity007.user_service.utils.CommonUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +48,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public JWTResponse login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto){
+    public ResponseEntity<JWTResponse> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
 
         String email = userLoginRequestDto.getEmail();
         String password = userLoginRequestDto.getPassword();
 
-        JWTResponse jwtResponse = loginService.login(email, password, "168.0.0.1");
+        String clientIp = CommonUtil.getClientIPAddress(headers.get("x-forwarded-for"), request);
 
-        return jwtResponse;
+        JWTResponse jwtResponse = loginService.login(email, password, clientIp);
+        return ResponseEntity.ok().body(jwtResponse);
     }
+
+
 }
