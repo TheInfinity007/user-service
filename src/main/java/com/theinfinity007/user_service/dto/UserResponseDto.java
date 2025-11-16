@@ -3,8 +3,7 @@ package com.theinfinity007.user_service.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ public class UserResponseDto {
     private String lastName;
     private String title;
     private String gender;
-    private LocalDate birthday;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private Date birthday;
+    private Date createdAt;
+    private Date modifiedAt;
 }

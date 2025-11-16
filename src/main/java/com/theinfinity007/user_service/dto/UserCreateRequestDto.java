@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -21,5 +22,5 @@ public class UserCreateRequestDto {
     private String lastName;
     private String gender;
     private String title;
-    private LocalDate birthday;
+    private Date birthday;
 }

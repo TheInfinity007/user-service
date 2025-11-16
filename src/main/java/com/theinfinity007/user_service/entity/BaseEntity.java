@@ -17,7 +17,7 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -27,4 +27,7 @@ public class BaseEntity {
     @Column(name = "modified_at", nullable = false)
     @LastModifiedDate
     private Date modifiedAt;
+
+    @Version
+    private Long version;
 }

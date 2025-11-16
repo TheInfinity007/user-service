@@ -1,26 +1,19 @@
 package com.theinfinity007.user_service.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users", indexes = {
         @Index(name = "idx_email", columnList = "email", unique = true)
 })
-public class User {
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends BaseEntity{
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -40,16 +33,5 @@ public class User {
     private String title;
 
     @Column(name = "birthday")
-    private LocalDate birthday;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "modified_at", nullable = false, updatable = true)
-    private LocalDateTime modifiedAt;
-
-    @Version
-    private Long version;
+    private Date birthday;
 }
