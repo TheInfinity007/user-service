@@ -7,6 +7,7 @@ import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.enums.TokenType;
 import com.theinfinity007.user_service.utils.CryptoUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class TokenServiceImpl implements TokenService {
     private final JWTTokenProviderImpl tokenProvider;
     private final TokenDAO tokenDAO;
     private final int REFRESH_TOKEN_LENGTH = 45;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public JWTResponse generateToken(Map<String, Object> payload, User user, String ip) {
@@ -30,11 +32,13 @@ public class TokenServiceImpl implements TokenService {
         String refreshToken = CryptoUtil.getRandomString(REFRESH_TOKEN_LENGTH);
         result.setRefreshToken(refreshToken);
 
+        String refreshTokenHash = passwordEncoder.encode(refreshToken);
+
         Token token = new Token();
-        token.setToken(refreshToken);
+        token.setToken(refreshTokenHash);
         token.setType(TokenType.REFRESH_TOKEN);
         token.setUser(user);
-        token.setLastUsedAt(Date.from(Instant.now()));
+        token.setAccessedAt(Date.from(Instant.now()));
         token.setAccessCount(0);
         token.setIp(ip);
 

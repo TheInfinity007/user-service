@@ -26,12 +26,16 @@ public class Token extends BaseEntity {
     @Column(name = "type", nullable = false)
     private TokenType type;
 
-    @Column(name = "last_used_at")
-    private Date lastUsedAt;
+    @Column(name = "accessed_at")
+    private Date accessedAt;
 
     @Column(name = "access_count")
     private int accessCount;
 
     @Column(name = "ip")
     private String ip;
+
+    @Column(name = "deleted_at")
+    private Date deletedAt;
+
 }
