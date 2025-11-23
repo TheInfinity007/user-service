@@ -25,7 +25,7 @@ public class JWTTokenProviderImpl implements JWTTokenProvider {
     public JWTResponse signJWT(Map<String, Object> payload, String subject) {
         Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getJwtSecret());
 
-        Date expiresAt = Date.from(Instant.now().plusSeconds(jwtConfig.getJwtExpiry()));
+        Instant expiresAt =Instant.now().plusSeconds(jwtConfig.getJwtExpiry());
 
         try {
             String accessToken = JWT.create()
@@ -33,6 +33,7 @@ public class JWTTokenProviderImpl implements JWTTokenProvider {
                     .withSubject(subject)
                     .withPayload(payload)
                     .withExpiresAt(expiresAt)
+                    .withIssuedAt(Instant.now())
                     .sign(algorithm);
 
             JWTResponse jwtResponse = new JWTResponse();
