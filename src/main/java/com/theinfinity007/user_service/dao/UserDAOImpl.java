@@ -23,7 +23,7 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public User findByEmail(String email) {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE email = :email", User.class);
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
         query.setParameter("email", email);
 
         try {

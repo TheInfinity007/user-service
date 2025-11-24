@@ -24,7 +24,7 @@ public class TokenDAOImpl implements TokenDAO {
 
     @Override
     public Token findByToken(String token) {
-        TypedQuery<Token> query = entityManager.createQuery("FROM Token WHERE token = :token and deletedAt IS NULL", Token.class);
+        TypedQuery<Token> query = entityManager.createQuery("FROM Token t WHERE t.token = :token and t.deletedAt IS NULL", Token.class);
         query.setParameter("token" , token);
 
         try {

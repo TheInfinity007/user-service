@@ -19,7 +19,7 @@ public class OauthController {
     private final TokenService tokenService;
 
     @PostMapping("/token")
-    public ResponseEntity<JWTResponse> refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request){
+    public ResponseEntity<JWTResponse> refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto, @RequestParam(name = "grant_type") String grantType, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
 
         String clientIp = CommonUtil.getClientIPAddress(headers.get("x-forwarded-for"), request);
 
