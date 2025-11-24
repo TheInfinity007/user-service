@@ -79,6 +79,17 @@ public class TokenServiceImpl implements TokenService {
         return jwtResponse;
     }
 
+    @Override
+    @Transactional
+    public void revokeToken(String refreshToken, String ip) {
+        Token token = findByRefreshToken(refreshToken);
+
+        token.setIp(ip);
+        token.setDeletedAt(Date.from(Instant.now()));
+
+        tokenDAO.save(token);
+    }
+
     private Token findByRefreshToken(String refreshToken) {
         String refreshTokenHash = getRefreshTokenHash(refreshToken);
 

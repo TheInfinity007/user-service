@@ -15,4 +15,6 @@ public interface TokenService {
     Token save(Token token);
 
     JWTResponse refreshToken(String token, String ip);
+
+    void revokeToken(String token, String ip);
 }

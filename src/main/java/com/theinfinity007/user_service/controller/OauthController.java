@@ -2,6 +2,7 @@ package com.theinfinity007.user_service.controller;
 
 import com.theinfinity007.user_service.dto.JWTResponse;
 import com.theinfinity007.user_service.dto.RefreshTokenRequestDto;
+import com.theinfinity007.user_service.dto.RevokeTokenRequestDto;
 import com.theinfinity007.user_service.service.TokenService;
 import com.theinfinity007.user_service.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,5 +29,15 @@ public class OauthController {
         JWTResponse jwtResponse = tokenService.refreshToken(token, clientIp);
 
         return ResponseEntity.ok().body(jwtResponse);
+    }
+
+    @PostMapping("/revoke")
+    public ResponseEntity<Void> revokeToken(@RequestBody RevokeTokenRequestDto revokeTokenRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
+        String clientIp = CommonUtil.getClientIPAddress(headers.get("x-forwarded-for"), request);
+        String token = revokeTokenRequestDto.getToken();
+
+        tokenService.revokeToken(token, clientIp);
+
+        return ResponseEntity.noContent().build();
     }
 }
