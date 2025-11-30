@@ -16,7 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -61,8 +62,11 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Void> fetchProfile(Authentication authentication, @RequestHeader(name = "authorization") String authorization) {
-        System.out.println(authentication);
+    public ResponseEntity<Void> fetchProfile(@AuthenticationPrincipal Jwt jwt) {
+
+        System.out.println(jwt);
+
+        System.out.println("Profile fetched");
         return ResponseEntity.ok().build();
     }
 }

@@ -20,4 +20,7 @@ public class JWTConfig {
     @Value("${jwt.issuer}")
     private String jwtIssuer;
 
+    @Value("${jwt.algorithm}")
+    private String algorithm;
+
 }
