@@ -62,11 +62,13 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Void> fetchProfile(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<UserResponseDto> fetchProfile(@AuthenticationPrincipal Jwt jwt) {
 
-        System.out.println(jwt);
+        Long userId = Long.valueOf(jwt.getClaim("sub"));
 
-        System.out.println("Profile fetched");
-        return ResponseEntity.ok().build();
+        User user = userService.findById(userId);
+
+        UserResponseDto response = UserResponseMapper.populate(user);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
