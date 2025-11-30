@@ -19,6 +19,10 @@ spring:
         # Configure JPA/Hibernate to control the database schema, possible values: create,create-drop,update,validate,none
       ddl-auto: update
 
+application:
+  security:
+    permitted:
+      url-pattern: "${security.permitted.url-pattern:/swagger-ui/**,/v3/api-docs/**,/actuator/**}"
 # Display spring-bott-actuator in swagger
 springdoc:
   show-actuator: true

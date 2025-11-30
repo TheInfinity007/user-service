@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -59,5 +60,9 @@ public class UserController {
         return ResponseEntity.ok().body(jwtResponse);
     }
 
-
+    @GetMapping("/me")
+    public ResponseEntity<Void> fetchProfile(Authentication authentication, @RequestHeader(name = "authorization") String authorization) {
+        System.out.println(authentication);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -38,3 +38,10 @@ Todos
 * DELETE /v1/users/me/sessions - Revoke all sessions
 
 
+Authentication Manager
+
+Provider manager -> common implementation of Authentication Manager
+    ProviderManager delegates to a List of AuthenticationProvider instances
+
+Authentication Provider -Perform a specific type of authentiction, for example, DAOAuthenticationProvider supports username/password based authentication, while
+JwtAuthenticationProvider supports authenticating a JWT token
