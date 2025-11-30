@@ -1,6 +1,7 @@
 package com.theinfinity007.user_service.security;
 
 import com.theinfinity007.user_service.config.JWTConfig;
+import com.theinfinity007.user_service.exception.handler.JwtAuthenticationExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -58,7 +59,10 @@ public class SecurityConfiguration {
 
                     auth.anyRequest().authenticated();
                 })
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                        .authenticationEntryPoint(new JwtAuthenticationExceptionHandler())    // handle token expiress
+                );
 
         return http.build();
     }
