@@ -23,6 +23,9 @@ application:
   security:
     permitted:
       url-pattern: "${security.permitted.url-pattern:/swagger-ui/**,/v3/api-docs/**,/actuator/**}"
+    anonymous:
+      access-route:
+          "POST:/v1/users/login,POST:/v1/users"
 # Display spring-bott-actuator in swagger
 springdoc:
   show-actuator: true
@@ -45,6 +48,8 @@ info:
 logging:
   level:
     org:
+      springframework:
+        security: TRACE
       hibernate:
         SQL: debug
         orm:

@@ -17,6 +17,9 @@ public class SecurityConfiguration {
     @Value("${application.security.permitted.url-pattern}")
     private final String[] permittedUrlPattern;
 
+    @Value("${application.security.anonymous.access-route}")
+    private final String[] anonymousAccessRoutes;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new Argon2PasswordEncoder(32, 64, 2, 1 << 16, 4);
@@ -26,11 +29,19 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF for REST API
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers(permittedUrlPattern).permitAll()
-                                .anyRequest().authenticated()   // Remove the auth
-                );
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(permittedUrlPattern).permitAll();  // Allow access to
+
+                    for (String route : anonymousAccessRoutes) {    // Allow anonymous access to specific endpoint
+                        String[] parts = route.split(":");
+                        String method = parts[0];
+                        String path = parts[1];
+
+                        auth.requestMatchers(method, path).permitAll();
+                    }
+
+                    auth.anyRequest().authenticated();
+                });
 
         return http.build();
     }
