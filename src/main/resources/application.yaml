@@ -20,6 +20,13 @@ spring:
       ddl-auto: update
 
 application:
+  jwt:
+    algorithm: "HS256"
+    expiry: 600
+    issuer: "https://theinfinity007.github.io"
+    scopes: "openid profile email offline_access"
+    secret: "556e19c172530255c55c001dc574032499f13b19725263548e552e5a385fa95a"
+
   security:
     permitted:
       url-pattern: "${security.permitted.url-pattern:/swagger-ui/**,/v3/api-docs/**,/actuator/**}"
@@ -56,8 +63,4 @@ logging:
           jdbc:
             bind: trace
 
-jwt:
-  algorithm: "HS256"
-  expiry: 600
-  issuer: "https://theinfinity007.github.io"
-  secret: "556e19c172530255c55c001dc574032499f13b19725263548e552e5a385fa95a"
+

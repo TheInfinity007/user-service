@@ -11,16 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTConfig {
 
-    @Value("${jwt.secret}")
+    @Value("${application.jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiry}")
+    @Value("${application.jwt.expiry}")
     private Long jwtExpiry;
 
-    @Value("${jwt.issuer}")
+    @Value("${application.jwt.issuer}")
     private String jwtIssuer;
 
-    @Value("${jwt.algorithm}")
+    @Value("${application.jwt.algorithm}")
     private String algorithm;
 
+    @Value("${application.jwt.scopes}")
+    private String scopes;
 }

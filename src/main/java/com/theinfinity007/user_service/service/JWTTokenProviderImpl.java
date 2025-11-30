@@ -34,6 +34,7 @@ public class JWTTokenProviderImpl implements JWTTokenProvider {
                     .withPayload(payload)
                     .withExpiresAt(expiresAt)
                     .withIssuedAt(Instant.now())
+                    .withClaim("scope", jwtConfig.getScopes())
                     .sign(algorithm);
 
             JWTResponse jwtResponse = new JWTResponse();
