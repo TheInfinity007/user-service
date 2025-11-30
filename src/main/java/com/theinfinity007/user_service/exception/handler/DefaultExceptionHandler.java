@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,8 +40,8 @@ public class DefaultExceptionHandler {
     }
 
     // Exception handler for the request query params
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponseDto> handleQueryParamValidationErrors(MissingServletRequestParameterException ex){
+    @ExceptionHandler({MissingServletRequestParameterException.class, MissingRequestHeaderException.class})
+    public ResponseEntity<ErrorResponseDto> handleQueryParamValidationErrors(MissingRequestValueException ex){
         String errorMessage = ex.getMessage();
 
         String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
