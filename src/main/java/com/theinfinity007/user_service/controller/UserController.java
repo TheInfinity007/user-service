@@ -69,7 +69,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping("/me")
+    @PutMapping(value = "/me")
     public ResponseEntity<UserResponseDto> updateUser(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequestDto payload){
         Long userId = CommonUtil.getUserIdFromToken(jwt);
 
@@ -82,7 +82,22 @@ public class UserController {
 
         UserResponseDto response = UserResponseMapper.populate(user);
 
-        return ResponseEntity.status(200).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping(value = "/{userId}")
+    public ResponseEntity<UserResponseDto> updateUserById(@PathVariable Long userId, @Valid @RequestBody UserUpdateRequestDto payload){
+
+        // Validate user existence
+        User user = userService.findById(userId);
+
+        user = userRequestMapper.populate(payload, user);
+
+        user = userService.update(user);
+
+        UserResponseDto response = UserResponseMapper.populate(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/me")
