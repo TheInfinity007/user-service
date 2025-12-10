@@ -22,7 +22,7 @@ spring:
 application:
   jwt:
     algorithm: "HS256"
-    expiry: 600
+    expiry: 3600
     issuer: "https://theinfinity007.github.io"
     scopes: "openid profile email offline_access"
     secret: "556e19c172530255c55c001dc574032499f13b19725263548e552e5a385fa95a"

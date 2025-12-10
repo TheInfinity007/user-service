@@ -4,6 +4,7 @@ import com.theinfinity007.user_service.dto.ErrorResponseDto;
 import com.theinfinity007.user_service.exception.UserServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class DefaultExceptionHandler {
@@ -57,5 +56,24 @@ public class DefaultExceptionHandler {
         ErrorResponseDto response = new ErrorResponseDto(ex.getStatusCode(), ex.getErrorCode(), ex.getMessage(), timestamp);
 
         return ResponseEntity.status(ex.getStatusCode()).body(response);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleUncaughtException(Exception ex) {
+        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+
+        int statusCode = 500;
+        String errorCode = "Internal Server Error";
+        String errorMessage = ex.getMessage();
+
+
+        if (ex instanceof HttpMessageNotReadableException) {
+            statusCode = HttpStatus.BAD_REQUEST.value();
+            errorCode = HttpStatus.BAD_REQUEST.getReasonPhrase();
+        }
+
+        ErrorResponseDto response = new ErrorResponseDto(statusCode, errorCode, errorMessage, timestamp);
+
+        return ResponseEntity.status(500).body(response);
     }
 }

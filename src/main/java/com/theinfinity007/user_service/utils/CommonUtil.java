@@ -2,6 +2,7 @@ package com.theinfinity007.user_service.utils;
 
 import com.theinfinity007.user_service.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,5 +33,13 @@ public class CommonUtil {
         payload.put(emailClaim, user.getEmail());
 
         return payload;
+    }
+
+    public static Long getUserIdFromToken(Jwt jwt){
+        return Long.valueOf(jwt.getClaim("sub"));
+    }
+
+    public static String getEmailFromToken(Jwt jwt){
+        return jwt.getClaim("email");
     }
 }

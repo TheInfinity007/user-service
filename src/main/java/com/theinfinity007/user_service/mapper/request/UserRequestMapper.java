@@ -1,9 +1,9 @@
 package com.theinfinity007.user_service.mapper.request;
 
 import com.theinfinity007.user_service.dto.UserCreateRequestDto;
+import com.theinfinity007.user_service.dto.UserUpdateRequestDto;
 import com.theinfinity007.user_service.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,5 +27,16 @@ public class UserRequestMapper {
         user.setTitle(userCreateRequestDto.getTitle());
 
         return user;
+    }
+
+    public User populate(UserUpdateRequestDto source, User target){
+
+        target.setFirstName(source.getFirstName());
+        target.setLastName(source.getLastName());
+        target.setBirthday(source.getBirthday());
+        target.setGender(source.getGender());
+        target.setTitle(source.getTitle());
+
+        return target;
     }
 }

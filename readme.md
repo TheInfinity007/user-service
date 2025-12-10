@@ -3,11 +3,16 @@
 Todos
 * Create API to fetch the user details using the access token.
 
+## Bugs
+* Getting expired token error in refresh token and revoke token api endpoints
+* Handle the empty spaces by trimming the strings from payload
+
 ## High Priority (Core User APIs)
 * GET /v1/users/me - Get current user profile using access token
 * PUT /v1/users/me - Update current user profile
 * PUT /v1/users/me/password - Change password
 * DELETE /v1/users/me - Delete user account
+* API Key Authentication
 
 ## Medium Priority (Account Recovery)
 * POST /v1/users/forgot-password - Initiate password reset

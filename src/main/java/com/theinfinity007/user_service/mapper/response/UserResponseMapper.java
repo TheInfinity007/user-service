@@ -2,7 +2,9 @@ package com.theinfinity007.user_service.mapper.response;
 
 import com.theinfinity007.user_service.dto.UserResponseDto;
 import com.theinfinity007.user_service.entity.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserResponseMapper {
     public static UserResponseDto populate(User user){
         UserResponseDto userResponseDto = new UserResponseDto();

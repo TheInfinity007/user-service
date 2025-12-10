@@ -4,10 +4,10 @@ import com.theinfinity007.user_service.dao.UserDAO;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.exception.UserAlreadyExistsException;
 import com.theinfinity007.user_service.exception.UserNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService{
 
             throw new IllegalStateException("Unable to create user due to data constraint violatoin", e);
         }
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public User update(User user) {
+        return userDAO.update(user);
     }
 
     @Override

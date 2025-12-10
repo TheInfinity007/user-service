@@ -1,9 +1,6 @@
 package com.theinfinity007.user_service.controller;
 
-import com.theinfinity007.user_service.dto.JWTResponse;
-import com.theinfinity007.user_service.dto.UserCreateRequestDto;
-import com.theinfinity007.user_service.dto.UserResponseDto;
-import com.theinfinity007.user_service.dto.UserLoginRequestDto;
+import com.theinfinity007.user_service.dto.*;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
@@ -28,6 +25,7 @@ public class UserController {
     private final UserService userService;
     private final LoginService loginService;
     private final UserRequestMapper userRequestMapper;
+    private final UserResponseMapper userResponseMapper;
 
     @GetMapping("/{email}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable String email) {
@@ -70,5 +68,21 @@ public class UserController {
 
         UserResponseDto response = UserResponseMapper.populate(user);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDto> updateProfile(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequestDto payload){
+        Long userId = CommonUtil.getUserIdFromToken(jwt);
+
+        // Validate user existence
+        User user = userService.findById(userId);
+
+        user = userRequestMapper.populate(payload, user);
+
+        user = userService.update(user);
+
+        UserResponseDto response = UserResponseMapper.populate(user);
+
+        return ResponseEntity.status(200).body(response);
     }
 }
