@@ -10,4 +10,6 @@ public interface UserDAO {
     User findByEmail(String email);
 
     User findById(Long id);
+
+    void delete(User user);
 }

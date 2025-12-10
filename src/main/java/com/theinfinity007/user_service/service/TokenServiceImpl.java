@@ -22,7 +22,6 @@ public class TokenServiceImpl implements TokenService {
 
     private final JWTTokenProvider tokenProvider;
     private final TokenDAO tokenDAO;
-    private final UserService userService;
     private final int REFRESH_TOKEN_LENGTH = 45;
 
     private String getRefreshTokenHash(String refreshToken) {
@@ -61,10 +60,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     @Transactional
-    public JWTResponse refreshToken(String refreshToken, String ip) {
-        Token token = this.findByRefreshToken(refreshToken);
-        User user = userService.findById(token.getUser().getId());
-
+    public JWTResponse refreshToken(String refreshToken, String ip, User user, Token token) {
         Map<String, Object> payload = CommonUtil.prepareTokenPayload(user);
 
         JWTResponse jwtResponse = tokenProvider.signJWT(payload, user.getId().toString());
@@ -90,7 +86,12 @@ public class TokenServiceImpl implements TokenService {
         tokenDAO.save(token);
     }
 
-    private Token findByRefreshToken(String refreshToken) {
+    @Override
+    public void deleteByUserId(Long userId) {
+        tokenDAO.deleteByUserId(userId);
+    }
+
+    public Token findByRefreshToken(String refreshToken) {
         String refreshTokenHash = getRefreshTokenHash(refreshToken);
 
         Token token = tokenDAO.findByToken(refreshTokenHash);
@@ -101,15 +102,9 @@ public class TokenServiceImpl implements TokenService {
         return token;
     }
 
-
     @Override
     public Token save(Token token) {
         return tokenDAO.save(token);
     }
-
-
-
-
-
 
 }

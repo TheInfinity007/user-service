@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
@@ -43,5 +42,10 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User findById(Long id) {
         return entityManager.find(User.class, id);
+    }
+
+    @Override
+    public void delete(User user) {
+        entityManager.remove(user);
     }
 }

@@ -4,16 +4,18 @@ import com.theinfinity007.user_service.dao.UserDAO;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.exception.UserAlreadyExistsException;
 import com.theinfinity007.user_service.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    @Autowired
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
+    private final TokenService tokenService;
 
     @Override
     @Transactional
@@ -56,5 +58,12 @@ public class UserServiceImpl implements UserService{
         }
 
         return user;
+    }
+
+    @Override
+    @Transactional
+    public void delete(User user) {
+        tokenService.deleteByUserId(user.getId());
+        userDAO.delete(user);
     }
 }

@@ -3,13 +3,14 @@ package com.theinfinity007.user_service.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SoftDelete;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
+@SoftDelete()
 @Table(name = "users", indexes = {
         @Index(name = "idx_email", columnList = "email", unique = true)
 })

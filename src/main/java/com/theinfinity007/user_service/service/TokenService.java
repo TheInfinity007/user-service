@@ -12,9 +12,13 @@ public interface TokenService {
 
     Token create(Token token);
 
+    Token findByRefreshToken(String refreshToken);
+
     Token save(Token token);
 
-    JWTResponse refreshToken(String token, String ip);
+    JWTResponse refreshToken(String refreshToken, String ip, User user, Token token);
 
     void revokeToken(String token, String ip);
+
+    void deleteByUserId(Long userId);
 }

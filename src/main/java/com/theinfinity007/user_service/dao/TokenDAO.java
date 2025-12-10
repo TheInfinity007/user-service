@@ -8,4 +8,6 @@ public interface TokenDAO {
     Token findByToken(String token);
 
     Token save(Token token);
+
+    void deleteByUserId(Long userId);
 }

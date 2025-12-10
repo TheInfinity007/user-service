@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<UserResponseDto> updateProfile(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequestDto payload){
+    public ResponseEntity<UserResponseDto> updateUser(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequestDto payload){
         Long userId = CommonUtil.getUserIdFromToken(jwt);
 
         // Validate user existence
@@ -83,5 +83,16 @@ public class UserController {
         UserResponseDto response = UserResponseMapper.populate(user);
 
         return ResponseEntity.status(200).body(response);
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal Jwt jwt){
+        Long userId = CommonUtil.getUserIdFromToken(jwt);
+
+        User user = userService.findById(userId);
+
+        userService.delete(user);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

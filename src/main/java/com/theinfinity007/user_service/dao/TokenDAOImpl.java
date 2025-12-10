@@ -3,6 +3,7 @@ package com.theinfinity007.user_service.dao;
 import com.theinfinity007.user_service.entity.Token;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
@@ -37,5 +38,14 @@ public class TokenDAOImpl implements TokenDAO {
     @Override
     public Token save(Token token) {
         return entityManager.merge(token);
+    }
+
+    @Override
+    public void deleteByUserId(Long userId) {
+        Query query = entityManager.createQuery("DELETE FROM Token t WHERE t.user.id = :userId");
+        query.setParameter("userId", userId);
+
+        int res = query.executeUpdate();
+        System.out.println("Token deletion result = " + res);
     }
 }
