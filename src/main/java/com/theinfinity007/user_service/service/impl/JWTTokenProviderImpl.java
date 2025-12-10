@@ -1,4 +1,4 @@
-package com.theinfinity007.user_service.service;
+package com.theinfinity007.user_service.service.impl;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -6,10 +6,10 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.theinfinity007.user_service.config.JWTConfig;
 
 import com.theinfinity007.user_service.dto.JWTResponse;
+import com.theinfinity007.user_service.service.JWTTokenProvider;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.Map;
 
 @Component

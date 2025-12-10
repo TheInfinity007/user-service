@@ -1,4 +1,4 @@
-package com.theinfinity007.user_service.service;
+package com.theinfinity007.user_service.service.impl;
 
 import com.theinfinity007.user_service.dao.TokenDAO;
 import com.theinfinity007.user_service.dto.JWTResponse;
@@ -6,6 +6,8 @@ import com.theinfinity007.user_service.entity.Token;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.enums.TokenType;
 import com.theinfinity007.user_service.exception.RefreshTokenNotFoundException;
+import com.theinfinity007.user_service.service.JWTTokenProvider;
+import com.theinfinity007.user_service.service.TokenService;
 import com.theinfinity007.user_service.utils.CommonUtil;
 import com.theinfinity007.user_service.utils.CryptoUtil;
 import lombok.RequiredArgsConstructor;

@@ -1,18 +1,19 @@
-package com.theinfinity007.user_service.service;
+package com.theinfinity007.user_service.service.impl;
 
 import com.theinfinity007.user_service.dao.UserDAO;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.exception.UserAlreadyExistsException;
 import com.theinfinity007.user_service.exception.UserNotFoundException;
+import com.theinfinity007.user_service.service.TokenService;
+import com.theinfinity007.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
     private final TokenService tokenService;
