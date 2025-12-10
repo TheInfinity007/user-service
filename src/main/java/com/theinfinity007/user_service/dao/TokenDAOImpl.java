@@ -45,7 +45,6 @@ public class TokenDAOImpl implements TokenDAO {
         Query query = entityManager.createQuery("DELETE FROM Token t WHERE t.user.id = :userId");
         query.setParameter("userId", userId);
 
-        int res = query.executeUpdate();
-        System.out.println("Token deletion result = " + res);
+        query.executeUpdate();
     }
 }
