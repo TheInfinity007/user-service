@@ -25,7 +25,6 @@ public class UserController {
     private final UserService userService;
     private final LoginService loginService;
     private final UserRequestMapper userRequestMapper;
-    private final UserResponseMapper userResponseMapper;
 
     @GetMapping("/{email}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable String email) {

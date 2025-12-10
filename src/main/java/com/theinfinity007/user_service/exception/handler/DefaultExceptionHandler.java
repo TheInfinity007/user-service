@@ -1,5 +1,6 @@
 package com.theinfinity007.user_service.exception.handler;
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.theinfinity007.user_service.dto.ErrorResponseDto;
 import com.theinfinity007.user_service.exception.UserServiceException;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,26 @@ public class DefaultExceptionHandler {
         return ResponseEntity.status(ex.getStatusCode()).body(response);
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleUncaughtException(HttpMessageNotReadableException ex) {
+        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+
+        String errorMessage = ex.getMessage();
+
+
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+        String errorCode = HttpStatus.BAD_REQUEST.getReasonPhrase();
+
+        Throwable cause = ex.getCause();
+        if (cause instanceof UnrecognizedPropertyException upe) {
+            errorMessage = "Invalid property: " +  "\"" + upe.getPropertyName() + "\"";
+        }
+
+
+        ErrorResponseDto response = new ErrorResponseDto(statusCode, errorCode, errorMessage, timestamp);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUncaughtException(Exception ex) {
         String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
@@ -66,14 +87,8 @@ public class DefaultExceptionHandler {
         String errorCode = "Internal Server Error";
         String errorMessage = ex.getMessage();
 
-
-        if (ex instanceof HttpMessageNotReadableException) {
-            statusCode = HttpStatus.BAD_REQUEST.value();
-            errorCode = HttpStatus.BAD_REQUEST.getReasonPhrase();
-        }
-
         ErrorResponseDto response = new ErrorResponseDto(statusCode, errorCode, errorMessage, timestamp);
 
-        return ResponseEntity.status(500).body(response);
+        return ResponseEntity.status(statusCode).body(response);
     }
 }

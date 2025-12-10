@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = false)
 public class UserUpdateRequestDto {
     @NotBlank(message = "is required and must not be blank")
     private String firstName;
@@ -19,7 +19,7 @@ public class UserUpdateRequestDto {
     @NotBlank(message = "is required and must not be blank")
     private String lastName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "is required and must not be blank")
     private Date birthday;
 

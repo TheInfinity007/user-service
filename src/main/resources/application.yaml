@@ -18,6 +18,10 @@ spring:
     hibernate:
         # Configure JPA/Hibernate to control the database schema, possible values: create,create-drop,update,validate,none
       ddl-auto: update
+  jackson:
+    deserialization:
+      # Configure jackson to throw error on receiving unknown fields
+      fail-on-unknown-properties: true
 
 application:
   jwt:
