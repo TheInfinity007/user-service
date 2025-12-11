@@ -37,6 +37,7 @@ public class UserController {
     @PostMapping("")
     public ResponseEntity<UserResponseDto> signup(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
 
+        System.out.println("userCreateRequestDto.getFirstName() = " + userCreateRequestDto.getFirstName());
         User user = userRequestMapper.populate(userCreateRequestDto);
 
         User createdUser = userService.create(user);
