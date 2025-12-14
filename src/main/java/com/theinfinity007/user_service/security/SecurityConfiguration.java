@@ -2,10 +2,14 @@ package com.theinfinity007.user_service.security;
 
 import com.theinfinity007.user_service.config.JWTConfig;
 import com.theinfinity007.user_service.exception.handler.JwtAuthenticationExceptionHandler;
+import com.theinfinity007.user_service.security.authentication.CustomBearerTokenResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 
 import javax.crypto.spec.SecretKeySpec;
@@ -23,12 +28,19 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfiguration {
 
     @Value("${application.security.permitted.url-pattern}")
-    private final String[] permittedUrlPattern;
+    private String[] permittedUrlPattern;
 
     @Value("${application.security.anonymous.access-route}")
-    private final String[] anonymousAccessRoutes;
+    private String[] anonymousAccessRoutes;
+
+    @Value("${application.security.auth.jwt-access-route}")
+    private String[] jwtAccessRoutes;
 
     private final JWTConfig jwtConfig;
+
+    @Autowired
+    @Qualifier("requestMappingHandlerMapping")
+    private RequestMappingHandlerMapping handlerMapping;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,12 +59,13 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF for REST API
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(permittedUrlPattern).permitAll();  // Allow access to
+                    auth.requestMatchers(permittedUrlPattern).permitAll();  // Allow access to public endpoints
 
                     for (String route : anonymousAccessRoutes) {    // Allow anonymous access to specific endpoint
                         String[] parts = route.split(":");
-                        String method = parts[0];
+
                         String path = parts[1];
+                        HttpMethod method = HttpMethod.valueOf(parts[0]);
 
                         auth.requestMatchers(method, path).permitAll();
                     }
@@ -61,6 +74,7 @@ public class SecurityConfiguration {
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
+                        .bearerTokenResolver(new CustomBearerTokenResolver(jwtAccessRoutes, handlerMapping))
                         .authenticationEntryPoint(new JwtAuthenticationExceptionHandler())    // handle token expiress
                 );
 

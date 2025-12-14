@@ -36,7 +36,9 @@ application:
       url-pattern: "${security.permitted.url-pattern:/swagger-ui/**,/v3/api-docs/**,/actuator/**}"
     anonymous:
       access-route:
-        "POST:/v1/users/login,POST:/v1/users,GET:/v1/users/{email}"
+        "POST:/v1/users/login,POST:/v1/users,GET:/v1/users/{email},POST:/v1/oauth/token,POST:/v1/oauth/revoke"
+    auth:
+      jwt-access-route: "GET:/v1/users/me,PUT:/v1/users/me,DELETE:/v1/users/me"
 # Display spring-bott-actuator in swagger
 springdoc:
   show-actuator: true
