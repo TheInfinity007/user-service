@@ -1,7 +1,6 @@
 package com.theinfinity007.user_service.security.authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.web.servlet.HandlerExecutionChain;
@@ -22,12 +21,17 @@ public class CustomBearerTokenResolver implements BearerTokenResolver {
         this.handlerMapping = handlerMapping;
     }
 
-
     @Override
     public String resolve(HttpServletRequest request) {
         try {
             HandlerExecutionChain _handler = handlerMapping.getHandler(request);    // Resolve the handler
-            String routeTemplatePattern = request.getAttribute(matchingPatternAttributeName).toString();
+            Object routeTemplatePatternObj = request.getAttribute(matchingPatternAttributeName);
+
+            if (routeTemplatePatternObj == null) {
+                return null;
+            }
+
+            String routeTemplatePattern = routeTemplatePatternObj.toString();
             String method = request.getMethod();
 
             String routePattern = method + ":" + routeTemplatePattern;

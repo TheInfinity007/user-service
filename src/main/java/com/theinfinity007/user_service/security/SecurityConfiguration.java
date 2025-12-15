@@ -2,7 +2,9 @@ package com.theinfinity007.user_service.security;
 
 import com.theinfinity007.user_service.config.JWTConfig;
 import com.theinfinity007.user_service.exception.handler.JwtAuthenticationExceptionHandler;
+import com.theinfinity007.user_service.security.authentication.ApiKeyAuthenticationProvider;
 import com.theinfinity007.user_service.security.authentication.CustomBearerTokenResolver;
+import com.theinfinity007.user_service.security.filter.ApiKeyAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,13 +12,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -55,7 +60,15 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    AuthenticationManager authManager(HttpSecurity http, ApiKeyAuthenticationProvider apiKeyAuthenticationProvider) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(apiKeyAuthenticationProvider);
+
+        return authenticationManagerBuilder.build();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF for REST API
                 .authorizeHttpRequests(auth -> {
@@ -76,7 +89,8 @@ public class SecurityConfiguration {
                         .jwt(Customizer.withDefaults())
                         .bearerTokenResolver(new CustomBearerTokenResolver(jwtAccessRoutes, handlerMapping))
                         .authenticationEntryPoint(new JwtAuthenticationExceptionHandler())    // handle token expiress
-                );
+                )
+                .addFilterAfter(new ApiKeyAuthenticationFilter(authenticationManager), BearerTokenAuthenticationFilter.class);
 
         return http.build();
     }

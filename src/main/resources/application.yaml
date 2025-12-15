@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         # Format SQL queries for readability
-        format_sql: true
+        format_sql: false
     hibernate:
         # Configure JPA/Hibernate to control the database schema, possible values: create,create-drop,update,validate,none
       ddl-auto: update
@@ -68,5 +68,8 @@ logging:
         orm:
           jdbc:
             bind: trace
+    com:
+      theinfinity007:
+        user_service: TRACE
 
 
