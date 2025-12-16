@@ -4,8 +4,10 @@ import com.theinfinity007.user_service.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,5 +49,12 @@ public class CommonUtil {
 
     public static String getCurrentTimestamp(){
         return Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+    }
+
+    public static String generateRandomString(int length) {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 }

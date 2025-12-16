@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 throw new UserAlreadyExistsException(user.getEmail());
             }
 
-            throw new IllegalStateException("Unable to create user due to data constraint violatoin", e);
+            throw new IllegalStateException("Unable to create user due to data constraint violation", e);
         }
     }
 

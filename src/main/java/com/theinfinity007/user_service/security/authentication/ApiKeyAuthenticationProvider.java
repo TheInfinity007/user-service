@@ -40,7 +40,9 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     private AbstractAuthenticationToken validateApiKey(String apiKey) {
         if(Objects.equals(apiKey, "sample-test-key")){
             String scope = "fetch-profile";
-            ApiKey apiKeyEntity = new ApiKey("Sample key", apiKey, scope);
+            ApiKey apiKeyEntity = new ApiKey();
+            apiKeyEntity.setKey(apiKey);
+            apiKeyEntity.setScopes(new String[]{scope});
 
             return convertToToken(apiKeyEntity);
         }
@@ -58,6 +60,6 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     }
 
     private String[] getAuthorities(ApiKey apiKey){
-        return apiKey.getScope().split(SPACE);
+        return apiKey.getScopes();
     }
 }
