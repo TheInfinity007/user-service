@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<UserResponseDto> fetchProfile(@AuthenticationPrincipal Jwt jwt) {
 
         Long userId = Long.valueOf(jwt.getClaim("sub"));
@@ -71,6 +73,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/me")
+    @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<UserResponseDto> updateUser(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequestDto payload){
         Long userId = CommonUtil.getUserIdFromToken(jwt);
 
@@ -87,6 +90,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{userId}")
+    @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<UserResponseDto> updateUserById(@PathVariable Long userId, @Valid @RequestBody UserUpdateRequestDto payload){
 
         // Validate user existence
@@ -102,6 +106,7 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
+    @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal Jwt jwt){
         Long userId = CommonUtil.getUserIdFromToken(jwt);
 

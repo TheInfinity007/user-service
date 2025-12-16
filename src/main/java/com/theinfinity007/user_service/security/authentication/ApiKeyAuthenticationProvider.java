@@ -22,6 +22,7 @@ import java.util.List;
 public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     private final Log logger = LogFactory.getLog(getClass());
     private final ApiKeyService apiKeyService;
+    private final String AUTHORITY_PREFIX = "SCOPE_";
 
     public ApiKeyAuthenticationProvider(ApiKeyService apiKeyService) {
         this.apiKeyService = apiKeyService;
@@ -64,7 +65,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     private AbstractAuthenticationToken convertToToken(ApiKey apiKey){
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
         for(String authority: getAuthorities(apiKey)){
-            grantedAuthorityList.add(new SimpleGrantedAuthority(authority));
+            grantedAuthorityList.add(new SimpleGrantedAuthority(AUTHORITY_PREFIX + authority));
         }
 
         return new ApiKeyAuthenticationToken(apiKey.getKey(), grantedAuthorityList);
