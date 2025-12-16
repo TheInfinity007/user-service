@@ -1,6 +1,8 @@
 package com.theinfinity007.user_service.security.authentication;
 
 import com.theinfinity007.user_service.entity.ApiKey;
+import com.theinfinity007.user_service.exception.ApiKeyNotFoundException;
+import com.theinfinity007.user_service.service.ApiKeyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -13,13 +15,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     private final Log logger = LogFactory.getLog(getClass());
-    private final String SPACE = " ";
+    private final ApiKeyService apiKeyService;
+
+    public ApiKeyAuthenticationProvider(ApiKeyService apiKeyService) {
+        this.apiKeyService = apiKeyService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -37,18 +43,22 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
         return ApiKeyAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    private AbstractAuthenticationToken validateApiKey(String apiKey) {
-        if(Objects.equals(apiKey, "sample-test-key")){
-            String scope = "fetch-profile";
-            ApiKey apiKeyEntity = new ApiKey();
-            apiKeyEntity.setKey(apiKey);
-            apiKeyEntity.setDescription("dummy");
-            apiKeyEntity.setScopes(new String[]{scope});
+    private AbstractAuthenticationToken validateApiKey(String key) {
 
-            return convertToToken(apiKeyEntity);
+        ApiKey apiKey;
+        try {
+            apiKey = apiKeyService.findByKey(key);
+        } catch (ApiKeyNotFoundException ex) {
+            logger.debug("Api key does not exist");
+            throw new AuthenticationServiceException("Invalid Api key");
         }
 
-        throw new AuthenticationServiceException("Invalid Api key");
+        Date currentDate = new Date();
+        if (apiKey.getExpiredAt().before(currentDate)) {
+            throw new AuthenticationServiceException("Api key has expired");
+        }
+
+        return convertToToken(apiKey);
     }
 
     private AbstractAuthenticationToken convertToToken(ApiKey apiKey){
