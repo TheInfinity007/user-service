@@ -1,6 +1,7 @@
 package com.theinfinity007.user_service.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.theinfinity007.user_service.constant.AppConstant;
 import com.theinfinity007.user_service.dto.ErrorResponseDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class JwtAuthenticationExceptionHandler implements AuthenticationEntryPoi
         String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
         String errorMessage = authException.getMessage().toLowerCase().contains("jwt expired") ? "Expired token" : "Invalid token";
 
-        response.setContentType("application/json");
+        response.setContentType(AppConstant.APPLICATION_JSON);
         ErrorResponseDto responseBody = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), errorMessage, timestamp);
         response.getWriter().write(objectMapper.writeValueAsString(responseBody));
     }
