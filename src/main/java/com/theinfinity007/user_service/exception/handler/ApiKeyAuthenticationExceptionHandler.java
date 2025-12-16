@@ -12,8 +12,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+
+import static com.theinfinity007.user_service.utils.CommonUtil.getCurrentTimestamp;
 
 @Component
 public class ApiKeyAuthenticationExceptionHandler implements AuthenticationEntryPoint {
@@ -23,7 +23,7 @@ public class ApiKeyAuthenticationExceptionHandler implements AuthenticationEntry
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        String timestamp = getCurrentTimestamp();
         String errorMessage = authException.getMessage();
 
         response.setContentType(AppConstant.APPLICATION_JSON);

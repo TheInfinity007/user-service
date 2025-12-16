@@ -3,6 +3,7 @@ package com.theinfinity007.user_service.exception.handler;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.theinfinity007.user_service.dto.ErrorResponseDto;
 import com.theinfinity007.user_service.exception.UserServiceException;
+import com.theinfinity007.user_service.utils.CommonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 
 @RestControllerAdvice
 public class DefaultExceptionHandler {
@@ -33,7 +33,7 @@ public class DefaultExceptionHandler {
             break;
         }
 
-        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        String timestamp = CommonUtil.getCurrentTimestamp();
         int statusCode = HttpStatus.BAD_REQUEST.value();
         ErrorResponseDto response = new ErrorResponseDto(statusCode, HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage, timestamp);
         return ResponseEntity.status(statusCode).body(response);
@@ -44,7 +44,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleQueryParamValidationErrors(MissingRequestValueException ex){
         String errorMessage = ex.getMessage();
 
-        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        String timestamp = CommonUtil.getCurrentTimestamp();
         int statusCode = HttpStatus.BAD_REQUEST.value();
         ErrorResponseDto response = new ErrorResponseDto(statusCode, HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage, timestamp);
         return ResponseEntity.status(statusCode).body(response);
@@ -53,7 +53,7 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(UserServiceException.class)
     public ResponseEntity<?> handleUserServiceException(UserServiceException ex){
 
-        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        String timestamp = CommonUtil.getCurrentTimestamp();
         ErrorResponseDto response = new ErrorResponseDto(ex.getStatusCode(), ex.getErrorCode(), ex.getMessage(), timestamp);
 
         return ResponseEntity.status(ex.getStatusCode()).body(response);
@@ -61,7 +61,7 @@ public class DefaultExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleUncaughtException(HttpMessageNotReadableException ex) {
-        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        String timestamp = CommonUtil.getCurrentTimestamp();
 
         String errorMessage = ex.getMessage();
 
@@ -81,10 +81,10 @@ public class DefaultExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUncaughtException(Exception ex) {
-        String timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
+        String timestamp = CommonUtil.getCurrentTimestamp();
 
-        int statusCode = 500;
-        String errorCode = "Internal Server Error";
+        int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        String errorCode = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
         String errorMessage = ex.getMessage();
 
         ErrorResponseDto response = new ErrorResponseDto(statusCode, errorCode, errorMessage, timestamp);

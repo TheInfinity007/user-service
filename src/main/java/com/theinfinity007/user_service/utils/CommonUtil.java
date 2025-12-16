@@ -4,6 +4,8 @@ import com.theinfinity007.user_service.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,5 +43,9 @@ public class CommonUtil {
 
     public static String getEmailFromToken(Jwt jwt){
         return jwt.getClaim("email");
+    }
+
+    public static String getCurrentTimestamp(){
+        return Instant.now().truncatedTo(ChronoUnit.MILLIS).toString();
     }
 }
