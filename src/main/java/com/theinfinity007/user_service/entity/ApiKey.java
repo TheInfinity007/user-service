@@ -19,7 +19,7 @@ import java.util.Date;
 })
 public class ApiKey extends BaseEntity{
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = COLUMN_NAME_API_KEY, nullable = false)

@@ -13,7 +13,7 @@ public class ApiKeyRequestMapper {
         apiKey.setKey(CommonUtil.generateRandomString(AppConstant.API_KEY_LENGTH));
         apiKey.setDescription(apiKeyCreateRequestDto.getDescription());
         apiKey.setScopes(apiKeyCreateRequestDto.getScopes());
-        apiKey.setExpiredAt(apiKeyCreateRequestDto.getExpiredAt());
+        apiKey.setExpiredAt(apiKeyCreateRequestDto.getExpiry());
 
         return apiKey;
     }

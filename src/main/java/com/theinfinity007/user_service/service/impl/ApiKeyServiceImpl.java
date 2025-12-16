@@ -6,12 +6,14 @@ import com.theinfinity007.user_service.entity.ApiKey;
 import com.theinfinity007.user_service.exception.ApiKeyAlreadyExistsException;
 import com.theinfinity007.user_service.service.ApiKeyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ApiKeyServiceImpl implements ApiKeyService {
 
     private final ApiKeyDao apiKeyDao;
@@ -28,6 +30,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
                 throw new ApiKeyAlreadyExistsException();
             }
 
+            log.error("Unable to create api key due to data constraint violation", e);
             throw new IllegalStateException("Unable to create api key due to data constraint violation", e);
         }
     }

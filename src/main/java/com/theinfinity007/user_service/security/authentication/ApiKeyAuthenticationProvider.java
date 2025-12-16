@@ -42,6 +42,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
             String scope = "fetch-profile";
             ApiKey apiKeyEntity = new ApiKey();
             apiKeyEntity.setKey(apiKey);
+            apiKeyEntity.setDescription("dummy");
             apiKeyEntity.setScopes(new String[]{scope});
 
             return convertToToken(apiKeyEntity);

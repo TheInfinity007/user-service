@@ -4,6 +4,7 @@ import com.theinfinity007.user_service.dto.ApiKeyCreateRequestDto;
 import com.theinfinity007.user_service.entity.ApiKey;
 import com.theinfinity007.user_service.mapper.request.ApiKeyRequestMapper;
 import com.theinfinity007.user_service.service.ApiKeyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ApiKeyController {
     private final ApiKeyService apiKeyService;
 
     @PostMapping("")
-    public ResponseEntity<?> createApiKey(@RequestBody ApiKeyCreateRequestDto apiKeyCreateRequestDto) {
+    public ResponseEntity<?> createApiKey(@RequestBody @Valid ApiKeyCreateRequestDto apiKeyCreateRequestDto) {
         ApiKey apiKey = apiKeyRequestMapper.populate(apiKeyCreateRequestDto);
 
         apiKey = apiKeyService.create(apiKey);
