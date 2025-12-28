@@ -1,5 +1,6 @@
 package com.theinfinity007.user_service.security.authentication;
 
+import com.theinfinity007.user_service.entity.ApiKey;
 import lombok.*;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,27 +10,29 @@ import java.util.List;
 @Getter
 public class ApiKeyAuthenticationToken extends AbstractAuthenticationToken {
 
-    private final String apiKey;
+    private final String key;
+    private Object principal;
 
-    public ApiKeyAuthenticationToken(String apiKey){
+    public ApiKeyAuthenticationToken(String key) {
         super(null);
-        this.apiKey = apiKey;
+        this.key = key;
         setAuthenticated(false);
     }
 
-    public ApiKeyAuthenticationToken(String apiKey, List<GrantedAuthority> authority){
+    public ApiKeyAuthenticationToken(String key, List<GrantedAuthority> authority, ApiKey apiKey) {
         super(authority);
-        this.apiKey = apiKey;
+        this.key = key;
+        this.principal = apiKey;
         setAuthenticated(true);
     }
 
     @Override
     public Object getCredentials() {
-        return this.getApiKey();
+        return this.getKey();
     }
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return this.principal;
     }
 }

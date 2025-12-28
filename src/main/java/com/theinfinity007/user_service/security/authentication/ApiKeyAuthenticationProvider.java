@@ -33,7 +33,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
         this.logger.trace("ApiKeyAuthenticationProvider authenticate called");
 
         ApiKeyAuthenticationToken apiKeyAuthenticationToken = (ApiKeyAuthenticationToken) authentication;
-        AbstractAuthenticationToken token = validateApiKey(apiKeyAuthenticationToken.getApiKey());
+        AbstractAuthenticationToken token = validateApiKey(apiKeyAuthenticationToken.getKey());
 
         this.logger.debug("Authenticated api Key");
         return token;
@@ -68,7 +68,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
             grantedAuthorityList.add(new SimpleGrantedAuthority(AUTHORITY_PREFIX + authority));
         }
 
-        return new ApiKeyAuthenticationToken(apiKey.getKey(), grantedAuthorityList);
+        return new ApiKeyAuthenticationToken(apiKey.getKey(), grantedAuthorityList, apiKey);
     }
 
     private String[] getAuthorities(ApiKey apiKey){
