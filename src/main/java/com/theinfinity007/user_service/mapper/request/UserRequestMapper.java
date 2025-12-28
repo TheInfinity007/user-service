@@ -1,7 +1,7 @@
 package com.theinfinity007.user_service.mapper.request;
 
-import com.theinfinity007.user_service.dto.UserCreateRequestDto;
-import com.theinfinity007.user_service.dto.UserUpdateRequestDto;
+import com.theinfinity007.user_service.dto.request.UserCreateRequestDto;
+import com.theinfinity007.user_service.dto.request.UserUpdateRequestDto;
 import com.theinfinity007.user_service.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

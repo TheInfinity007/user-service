@@ -1,4 +1,4 @@
-package com.theinfinity007.user_service.dto;
+package com.theinfinity007.user_service.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

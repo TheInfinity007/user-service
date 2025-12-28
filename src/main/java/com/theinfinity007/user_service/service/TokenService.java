@@ -1,6 +1,6 @@
 package com.theinfinity007.user_service.service;
 
-import com.theinfinity007.user_service.dto.JWTResponse;
+import com.theinfinity007.user_service.dto.response.JWTResponse;
 import com.theinfinity007.user_service.entity.Token;
 import com.theinfinity007.user_service.entity.User;
 

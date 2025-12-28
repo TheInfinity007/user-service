@@ -1,4 +1,4 @@
-package com.theinfinity007.user_service.dto;
+package com.theinfinity007.user_service.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;

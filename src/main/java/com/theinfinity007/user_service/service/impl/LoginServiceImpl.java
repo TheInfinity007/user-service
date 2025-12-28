@@ -1,6 +1,6 @@
 package com.theinfinity007.user_service.service.impl;
 
-import com.theinfinity007.user_service.dto.JWTResponse;
+import com.theinfinity007.user_service.dto.response.JWTResponse;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.exception.InvalidEmailorPasswordException;
 import com.theinfinity007.user_service.service.LoginService;

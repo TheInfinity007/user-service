@@ -1,7 +1,7 @@
 package com.theinfinity007.user_service.service.impl;
 
 import com.theinfinity007.user_service.dao.TokenDAO;
-import com.theinfinity007.user_service.dto.JWTResponse;
+import com.theinfinity007.user_service.dto.response.JWTResponse;
 import com.theinfinity007.user_service.entity.Token;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.enums.TokenType;

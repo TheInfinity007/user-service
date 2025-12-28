@@ -2,7 +2,7 @@ package com.theinfinity007.user_service.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theinfinity007.user_service.constant.AppConstant;
-import com.theinfinity007.user_service.dto.ErrorResponseDto;
+import com.theinfinity007.user_service.dto.response.ErrorResponseDto;
 import com.theinfinity007.user_service.utils.CommonUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

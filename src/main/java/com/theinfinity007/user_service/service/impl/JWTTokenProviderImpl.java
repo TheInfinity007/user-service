@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.theinfinity007.user_service.config.JWTConfig;
 
-import com.theinfinity007.user_service.dto.JWTResponse;
+import com.theinfinity007.user_service.dto.response.JWTResponse;
 import com.theinfinity007.user_service.service.JWTTokenProvider;
 import org.springframework.stereotype.Component;
 

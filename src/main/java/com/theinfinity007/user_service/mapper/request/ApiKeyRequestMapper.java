@@ -1,7 +1,7 @@
 package com.theinfinity007.user_service.mapper.request;
 
 import com.theinfinity007.user_service.constant.AppConstant;
-import com.theinfinity007.user_service.dto.ApiKeyCreateRequestDto;
+import com.theinfinity007.user_service.dto.request.ApiKeyCreateRequestDto;
 import com.theinfinity007.user_service.entity.ApiKey;
 import com.theinfinity007.user_service.utils.CommonUtil;
 import org.springframework.stereotype.Component;

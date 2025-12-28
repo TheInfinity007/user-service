@@ -1,6 +1,6 @@
 package com.theinfinity007.user_service.controller;
 
-import com.theinfinity007.user_service.dto.ApiKeyCreateRequestDto;
+import com.theinfinity007.user_service.dto.request.ApiKeyCreateRequestDto;
 import com.theinfinity007.user_service.entity.ApiKey;
 import com.theinfinity007.user_service.mapper.request.ApiKeyRequestMapper;
 import com.theinfinity007.user_service.service.ApiKeyService;

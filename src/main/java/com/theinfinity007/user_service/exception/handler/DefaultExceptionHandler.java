@@ -3,7 +3,7 @@ package com.theinfinity007.user_service.exception.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.theinfinity007.user_service.constant.AppConstant;
-import com.theinfinity007.user_service.dto.ErrorResponseDto;
+import com.theinfinity007.user_service.dto.response.ErrorResponseDto;
 import com.theinfinity007.user_service.exception.UserServiceException;
 import com.theinfinity007.user_service.security.authentication.ApiKeyAuthenticationToken;
 import com.theinfinity007.user_service.utils.CommonUtil;

@@ -1,12 +1,11 @@
 package com.theinfinity007.user_service.controller;
 
-import com.theinfinity007.user_service.dto.JWTResponse;
-import com.theinfinity007.user_service.dto.RefreshTokenRequestDto;
-import com.theinfinity007.user_service.dto.RevokeTokenRequestDto;
+import com.theinfinity007.user_service.dto.response.JWTResponse;
+import com.theinfinity007.user_service.dto.request.RefreshTokenRequestDto;
+import com.theinfinity007.user_service.dto.request.RevokeTokenRequestDto;
 import com.theinfinity007.user_service.entity.Token;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.service.TokenService;
-import com.theinfinity007.user_service.service.UserService;
 import com.theinfinity007.user_service.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
