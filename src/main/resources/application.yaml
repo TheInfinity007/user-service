@@ -37,8 +37,6 @@ application:
     anonymous:
       access-route:
         "POST:v1/apikeys"
-    auth:
-      jwt-access-route: "GET:/v1/users/me,PUT:/v1/users/me,DELETE:/v1/users/me"
 # Display spring-bott-actuator in swagger
 springdoc:
   show-actuator: true

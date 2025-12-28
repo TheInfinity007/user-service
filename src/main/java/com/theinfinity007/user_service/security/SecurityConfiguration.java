@@ -2,8 +2,6 @@ package com.theinfinity007.user_service.security;
 
 import com.theinfinity007.user_service.config.JWTConfig;
 import com.theinfinity007.user_service.exception.handler.JwtAuthenticationExceptionHandler;
-import com.theinfinity007.user_service.security.authentication.ApiKeyAuthenticationProvider;
-import com.theinfinity007.user_service.security.authentication.CustomBearerTokenResolver;
 import com.theinfinity007.user_service.security.filter.ApiKeyAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +37,6 @@ public class SecurityConfiguration {
 
     @Value("${application.security.anonymous.access-route}")
     private String[] anonymousAccessRoutes;
-
-    @Value("${application.security.auth.jwt-access-route}")
-    private String[] jwtAccessRoutes;
 
     private final JWTConfig jwtConfig;
 
@@ -84,7 +79,6 @@ public class SecurityConfiguration {
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
-                        .bearerTokenResolver(new CustomBearerTokenResolver(jwtAccessRoutes, handlerMapping))
                         .authenticationEntryPoint(new JwtAuthenticationExceptionHandler())    // handle token expiress
                 )
                 .addFilterAfter(new ApiKeyAuthenticationFilter(authenticationManager), BearerTokenAuthenticationFilter.class);
