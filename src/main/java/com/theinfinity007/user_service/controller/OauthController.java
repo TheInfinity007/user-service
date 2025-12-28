@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,6 +24,7 @@ public class OauthController {
     private final TokenService tokenService;
 
     @PostMapping("/token")
+    @PreAuthorize("hasAuthority('oauth:token')")
     public ResponseEntity<JWTResponse> refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto, @RequestParam(name = "grant_type") String grantType, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
 
         String clientIp = CommonUtil.getClientIPAddress(headers.get("x-forwarded-for"), request);
@@ -38,6 +40,7 @@ public class OauthController {
     }
 
     @PostMapping("/revoke")
+    @PreAuthorize("hasAuthority('revoke:token')")
     public ResponseEntity<Void> revokeToken(@RequestBody RevokeTokenRequestDto revokeTokenRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
         String clientIp = CommonUtil.getClientIPAddress(headers.get("x-forwarded-for"), request);
         String token = revokeTokenRequestDto.getToken();

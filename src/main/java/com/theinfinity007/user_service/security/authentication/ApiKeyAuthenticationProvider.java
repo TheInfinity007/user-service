@@ -22,7 +22,7 @@ import java.util.List;
 public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     private final Log logger = LogFactory.getLog(getClass());
     private final ApiKeyService apiKeyService;
-    private final String AUTHORITY_PREFIX = "SCOPE_";
+    private final String AUTHORITY_PREFIX = "";
 
     public ApiKeyAuthenticationProvider(ApiKeyService apiKeyService) {
         this.apiKeyService = apiKeyService;

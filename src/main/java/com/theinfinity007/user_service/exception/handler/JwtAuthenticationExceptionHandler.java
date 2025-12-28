@@ -27,10 +27,25 @@ public class JwtAuthenticationExceptionHandler implements AuthenticationEntryPoi
         delegate.commence(request, response, authException);
 
         String timestamp = CommonUtil.getCurrentTimestamp();
-        String errorMessage = authException.getMessage().toLowerCase().contains("jwt expired") ? "Expired token" : "Invalid token";
+        String errorMessage = getErrorMessage(authException);
 
         response.setContentType(AppConstant.APPLICATION_JSON);
         ErrorResponseDto responseBody = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), errorMessage, timestamp);
         response.getWriter().write(objectMapper.writeValueAsString(responseBody));
+    }
+
+    private String getErrorMessage(AuthenticationException ex) {
+        String message = ex.getMessage().toLowerCase();
+        String result = "Invalid Token";
+
+        if (message.contains("authentication is required")) {
+            result = "Missing Authentication";
+        }
+
+        if (message.contains("jwt expired")) {
+            result = "Expired token";
+        }
+
+        return result;
     }
 }

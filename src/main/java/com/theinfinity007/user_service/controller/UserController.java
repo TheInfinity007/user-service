@@ -28,6 +28,7 @@ public class UserController {
     private final UserRequestMapper userRequestMapper;
 
     @GetMapping("/{email}")
+    @PreAuthorize("hasAuthority('read:user')")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable String email) {
         User user = userService.findByEmail(email);
 
@@ -36,6 +37,7 @@ public class UserController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('create:user')")
     public ResponseEntity<UserResponseDto> signup(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
 
         System.out.println("userCreateRequestDto.getFirstName() = " + userCreateRequestDto.getFirstName());
@@ -49,6 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @PreAuthorize("hasAuthority('login:user')")
     public ResponseEntity<JWTResponse> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
 
         String email = userLoginRequestDto.getEmail();
@@ -90,7 +93,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{userId}")
-    @PreAuthorize("hasAuthority('SCOPE_openid')")
+    @PreAuthorize("hasAuthority('update:user')")
     public ResponseEntity<UserResponseDto> updateUserById(@PathVariable Long userId, @Valid @RequestBody UserUpdateRequestDto payload){
 
         // Validate user existence
