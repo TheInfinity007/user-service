@@ -8,6 +8,7 @@ import com.theinfinity007.user_service.service.TokenService;
 import com.theinfinity007.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
     private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public User update(User user) {
         return userDAO.update(user);
     }
@@ -66,5 +68,13 @@ public class UserServiceImpl implements UserService {
     public void delete(User user) {
         tokenService.deleteByUserId(user.getId());
         userDAO.delete(user);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(User user, String password) {
+        String hashedPassword = passwordEncoder.encode(password);
+        user.setPassword(hashedPassword);
+        userDAO.update(user);
     }
 }

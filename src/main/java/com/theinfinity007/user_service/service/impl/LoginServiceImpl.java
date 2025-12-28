@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
         return tokenService.generateToken(payload, user, ip);
     }
 
-    private boolean validatePassword(String hashedPassword, String password) {
+    public boolean validatePassword(String hashedPassword, String password) {
         return passwordEncoder.matches(password, hashedPassword);
     }
 }

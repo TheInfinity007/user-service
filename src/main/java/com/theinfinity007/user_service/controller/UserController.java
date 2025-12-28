@@ -2,6 +2,7 @@ package com.theinfinity007.user_service.controller;
 
 import com.theinfinity007.user_service.dto.*;
 import com.theinfinity007.user_service.entity.User;
+import com.theinfinity007.user_service.exception.PasswordConflictException;
 import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
 import com.theinfinity007.user_service.service.LoginService;
@@ -118,5 +119,24 @@ public class UserController {
         userService.delete(user);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    @PutMapping("/me/password")
+    @PreAuthorize("hasAuthority('SCOPE_openid')")
+    public ResponseEntity<Void> changePassword(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid ChangePasswordRequestDto changePasswordRequestDto) {
+        Long userId = CommonUtil.getUserIdFromToken(jwt);
+
+        String password = changePasswordRequestDto.getPassword();
+
+        User user = userService.findById(userId);
+
+        boolean isSame = loginService.validatePassword(user.getPassword(), password);
+        if (isSame) {
+            throw new PasswordConflictException();
+        }
+
+        userService.changePassword(user, password);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
