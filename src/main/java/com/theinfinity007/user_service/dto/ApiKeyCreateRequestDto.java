@@ -1,9 +1,6 @@
 package com.theinfinity007.user_service.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,5 +15,6 @@ public class ApiKeyCreateRequestDto {
     private String[] scopes;
 
     @NotNull
+    @Future
     private Date expiry;
 }
