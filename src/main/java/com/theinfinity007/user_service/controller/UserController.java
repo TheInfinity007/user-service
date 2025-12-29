@@ -1,5 +1,6 @@
 package com.theinfinity007.user_service.controller;
 
+import com.theinfinity007.user_service.constant.AppConstant;
 import com.theinfinity007.user_service.dto.request.ChangePasswordRequestDto;
 import com.theinfinity007.user_service.dto.request.UserCreateRequestDto;
 import com.theinfinity007.user_service.dto.request.UserLoginRequestDto;
@@ -13,6 +14,9 @@ import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
 import com.theinfinity007.user_service.service.LoginService;
 import com.theinfinity007.user_service.service.UserService;
 import com.theinfinity007.user_service.utils.CommonUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User")
 @RestController
 @RequestMapping("/v1/users")
 @RequiredArgsConstructor
@@ -33,6 +38,7 @@ public class UserController {
     private final LoginService loginService;
     private final UserRequestMapper userRequestMapper;
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)})
     @GetMapping("/{email}")
     @PreAuthorize("hasAuthority('read:user')")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable String email) {
@@ -42,11 +48,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)})
     @PostMapping("")
     @PreAuthorize("hasAuthority('create:user')")
     public ResponseEntity<UserResponseDto> signup(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
-
-        System.out.println("userCreateRequestDto.getFirstName() = " + userCreateRequestDto.getFirstName());
         User user = userRequestMapper.populate(userCreateRequestDto);
 
         User createdUser = userService.create(user);
@@ -56,6 +61,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)})
     @PostMapping("/login")
     @PreAuthorize("hasAuthority('login:user')")
     public ResponseEntity<JWTResponse> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
@@ -69,6 +75,7 @@ public class UserController {
         return ResponseEntity.ok().body(jwtResponse);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_OAUTH)})
     @GetMapping("/me")
     @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<UserResponseDto> fetchProfile(@AuthenticationPrincipal Jwt jwt) {
@@ -81,6 +88,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_OAUTH)})
     @PutMapping(value = "/me")
     @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<UserResponseDto> updateUser(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequestDto payload){
@@ -98,6 +106,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)})
     @PutMapping(value = "/{userId}")
     @PreAuthorize("hasAuthority('update:user')")
     public ResponseEntity<UserResponseDto> updateUserById(@PathVariable Long userId, @Valid @RequestBody UserUpdateRequestDto payload){
@@ -114,6 +123,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_OAUTH)})
     @DeleteMapping("/me")
     @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal Jwt jwt){
@@ -126,6 +136,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_OAUTH)})
     @PutMapping("/me/password")
     @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<Void> changePassword(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid ChangePasswordRequestDto changePasswordRequestDto) {

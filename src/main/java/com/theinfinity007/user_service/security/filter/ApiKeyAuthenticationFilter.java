@@ -39,7 +39,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String apiKey = request.getHeader(AppConstant.X_API_KEY);
+        String apiKey = request.getHeader(AppConstant.HEADER_X_API_KEY);
         if (apiKey == null) {
             this.logger.trace("Did not process request since did not find api key");
             filterChain.doFilter(request, response);

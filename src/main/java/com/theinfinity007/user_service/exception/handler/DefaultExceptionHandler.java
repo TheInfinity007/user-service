@@ -65,7 +65,7 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(UserServiceException.class)
-    public ResponseEntity<?> handleUserServiceException(UserServiceException ex){
+    public ResponseEntity<ErrorResponseDto> handleUserServiceException(UserServiceException ex){
 
         String timestamp = CommonUtil.getCurrentTimestamp();
         ErrorResponseDto response = new ErrorResponseDto(ex.getStatusCode(), ex.getErrorCode(), ex.getMessage(), timestamp);
@@ -74,7 +74,7 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<?> handleUncaughtException(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ErrorResponseDto> handleUncaughtException(HttpMessageNotReadableException ex) {
         String timestamp = CommonUtil.getCurrentTimestamp();
 
         String errorMessage = ex.getMessage();
@@ -115,7 +115,7 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleUncaughtException(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleUncaughtException(Exception ex) {
         String timestamp = CommonUtil.getCurrentTimestamp();
 
         int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
