@@ -1,17 +1,21 @@
 package com.theinfinity007.user_service.controller;
 
+import com.theinfinity007.user_service.config.OtpConfig;
 import com.theinfinity007.user_service.constant.AppConstant;
-import com.theinfinity007.user_service.dto.request.ChangePasswordRequestDto;
-import com.theinfinity007.user_service.dto.request.UserCreateRequestDto;
-import com.theinfinity007.user_service.dto.request.UserLoginRequestDto;
-import com.theinfinity007.user_service.dto.request.UserUpdateRequestDto;
+import com.theinfinity007.user_service.dto.request.*;
+import com.theinfinity007.user_service.dto.response.ForgotPasswordResponseDto;
 import com.theinfinity007.user_service.dto.response.JWTResponse;
 import com.theinfinity007.user_service.dto.response.UserResponseDto;
+import com.theinfinity007.user_service.entity.Otp;
 import com.theinfinity007.user_service.entity.User;
+import com.theinfinity007.user_service.enums.OtpAction;
 import com.theinfinity007.user_service.exception.PasswordConflictException;
+import com.theinfinity007.user_service.exception.UserNotFoundException;
+import com.theinfinity007.user_service.mapper.request.OtpRequestMapper;
 import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
 import com.theinfinity007.user_service.service.LoginService;
+import com.theinfinity007.user_service.service.OTPService;
 import com.theinfinity007.user_service.service.UserService;
 import com.theinfinity007.user_service.utils.CommonUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +40,10 @@ public class UserController {
 
     private final UserService userService;
     private final LoginService loginService;
+    private final OTPService otpService;
     private final UserRequestMapper userRequestMapper;
+    private final OtpRequestMapper otpRequestMapper;
+    private final OtpConfig otpConfig;
 
     @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)})
     @GetMapping("/{email}")
@@ -155,4 +162,28 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)}, summary = "Initiate password reset process")
+    @PostMapping("/forgot-password")
+    @PreAuthorize("hasAuthority('forgot-password')")
+    public ResponseEntity<ForgotPasswordResponseDto> forgotPassword(@RequestBody @Valid ForgotPasswordRequestDto forgotPasswordRequestDto) {
+        String email = forgotPasswordRequestDto.getEmail();
+        ForgotPasswordResponseDto response = new ForgotPasswordResponseDto();
+
+        User user = null;
+        try {
+            user = userService.findByEmail(email);
+        } catch (UserNotFoundException _ex) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+
+
+        String otpCode = CommonUtil.generateRandomString(otpConfig.getLength().getPasswordReset());
+        Otp otp = otpRequestMapper.execute(email, OtpAction.RESET_PASSWORD, otpCode, user, AppConstant.COMMUNICATION_CHANNEL_EMAIL);
+
+        otpService.create(otp);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

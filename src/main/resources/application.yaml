@@ -37,9 +37,19 @@ application:
     anonymous:
       access-route:
         "POST:v1/apikeys"
+
+  otp:
+    expiry:
+      defaultExpiry: 10
+      passwordReset: 5
+    length:
+      defaultLength: 6
+      passwordReset: 6
+
 # Display spring-bott-actuator in swagger
 springdoc:
   show-actuator: true
+  writer-with-order-by-keys: true
 
 management:
   endpoints:
