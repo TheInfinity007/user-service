@@ -5,6 +5,7 @@ import com.theinfinity007.user_service.constant.AppConstant;
 import com.theinfinity007.user_service.dto.request.*;
 import com.theinfinity007.user_service.dto.response.ForgotPasswordResponseDto;
 import com.theinfinity007.user_service.dto.response.JWTResponse;
+import com.theinfinity007.user_service.dto.response.ResetPasswordResponseDto;
 import com.theinfinity007.user_service.dto.response.UserResponseDto;
 import com.theinfinity007.user_service.entity.Otp;
 import com.theinfinity007.user_service.entity.User;
@@ -194,7 +195,7 @@ public class UserController {
             security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)},
             summary = "Reset Password")
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
+    public ResponseEntity<ResetPasswordResponseDto> resetPassword(@Valid @RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
 
         String email = resetPasswordRequestDto.getEmail();
         String code = resetPasswordRequestDto.getToken();
@@ -231,6 +232,7 @@ public class UserController {
 
         userService.changePassword(user, newPassword);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ResetPasswordResponseDto response = new ResetPasswordResponseDto();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
