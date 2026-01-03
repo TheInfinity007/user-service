@@ -7,10 +7,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommonUtil {
 
@@ -56,5 +53,9 @@ public class CommonUtil {
         byte[] bytes = new byte[length];
         random.nextBytes(bytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    public static boolean checkExpiry(Date incomingValue, int gracePeriodInMs) {
+        return System.currentTimeMillis() > (incomingValue.getTime() + gracePeriodInMs);
     }
 }

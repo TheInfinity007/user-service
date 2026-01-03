@@ -21,15 +21,14 @@ public class OtpRequestMapper {
 
     private final OtpConfig otpConfig;
 
-    public Otp execute(String email, OtpAction action, String otpCode, User user, String channel) {
+    public Otp execute(String email, OtpAction action, String otpCode, String channel) {
         Otp otp = new Otp();
         otp.setUuid(UUID.randomUUID().toString());
         otp.setOtpCode(otpCode);
         otp.setAction(action.name());
         otp.setEmail(email);
-        otp.setUser(user);
         otp.setChannel(channel);
-        otp.setStatus(OtpStatus.PENDING);
+        otp.setStatus(OtpStatus.NEW);
         otp.setExpiredAt(getExpiry(action));
 
         return otp;

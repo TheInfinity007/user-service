@@ -18,4 +18,14 @@ public class OTPServiceImpl implements OTPService {
     public Otp create(Otp otp) {
         return otpDAO.create(otp);
     }
+
+    public Otp get(String email, String code) {
+        return otpDAO.get(email, code);
+    }
+
+    @Override
+    @Transactional
+    public Otp update(Otp otp) {
+        return otpDAO.update(otp);
+    }
 }

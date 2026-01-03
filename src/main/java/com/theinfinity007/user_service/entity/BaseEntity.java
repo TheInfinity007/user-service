@@ -7,6 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import static com.theinfinity007.user_service.constant.DatabaseConstant.*;
+
 import java.util.Date;
 
 @Getter
@@ -20,7 +22,7 @@ public class BaseEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = COLUMN_NAME_CREATED_AT, nullable = false, updatable = false)
     @CreatedDate
     private Date createdAt;
 

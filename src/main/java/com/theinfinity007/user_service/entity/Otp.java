@@ -5,32 +5,35 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.theinfinity007.user_service.constant.DatabaseConstant.*;
+
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "otps")
+@Table(name = "otps", indexes = {
+        @Index(name = "idx_email_code_createdAt", columnList = COLUMN_NAME_EMAIL + "," + COLUMN_NAME_OTP_CODE + "," + COLUMN_NAME_CREATED_AT)
+})
 public class Otp extends BaseEntity {
 
-    @Column(name = "otp_code", nullable = false)
+    @Column(name = COLUMN_NAME_OTP_CODE, nullable = false)
     private String otpCode;
 
     @Column(name = "uuid", nullable = false)
     private String uuid;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_otp_user"))
-    private User user;
 
     @Column(name = "channel", nullable = false)
     private String channel;
 
     @Column(name = "action", nullable = false)
     private String action;
+
+    @Column(name = COLUMN_NAME_EMAIL)
     private String email;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = COLUMN_NAME_STATUS, nullable = false)
+    @Enumerated(EnumType.STRING)
     private OtpStatus status;
 
     @Column(name = "expired_at", nullable = false)

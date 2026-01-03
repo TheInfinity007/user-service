@@ -9,6 +9,10 @@ public class DatabaseConstant {
 
     // Column Names
     public static final String COLUMN_NAME_API_KEY = "api_key";
+    public static final String COLUMN_NAME_OTP_CODE = "otp_code";
+    public static final String COLUMN_NAME_STATUS = "status";
+    public static final String COLUMN_NAME_EMAIL = "email";
+    public static final String COLUMN_NAME_CREATED_AT = "created_at";
 
     private DatabaseConstant() {
         throw new AssertionError("Cannot instantiate constants class");

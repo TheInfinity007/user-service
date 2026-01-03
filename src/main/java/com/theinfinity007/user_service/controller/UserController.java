@@ -9,8 +9,8 @@ import com.theinfinity007.user_service.dto.response.UserResponseDto;
 import com.theinfinity007.user_service.entity.Otp;
 import com.theinfinity007.user_service.entity.User;
 import com.theinfinity007.user_service.enums.OtpAction;
-import com.theinfinity007.user_service.exception.PasswordConflictException;
-import com.theinfinity007.user_service.exception.UserNotFoundException;
+import com.theinfinity007.user_service.enums.OtpStatus;
+import com.theinfinity007.user_service.exception.*;
 import com.theinfinity007.user_service.mapper.request.OtpRequestMapper;
 import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
@@ -143,7 +143,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
-    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_OAUTH)})
+    @Operation(
+            security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_OAUTH)},
+            summary = "Change password using JWT"
+    )
     @PutMapping("/me/password")
     @PreAuthorize("hasAuthority('SCOPE_openid')")
     public ResponseEntity<Void> changePassword(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid ChangePasswordRequestDto changePasswordRequestDto) {
@@ -163,27 +166,71 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @Operation(security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)}, summary = "Initiate password reset process")
+    @Operation(
+            security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)},
+            summary = "Initiate password reset process")
     @PostMapping("/forgot-password")
     @PreAuthorize("hasAuthority('forgot-password')")
     public ResponseEntity<ForgotPasswordResponseDto> forgotPassword(@RequestBody @Valid ForgotPasswordRequestDto forgotPasswordRequestDto) {
         String email = forgotPasswordRequestDto.getEmail();
         ForgotPasswordResponseDto response = new ForgotPasswordResponseDto();
 
-        User user = null;
         try {
-            user = userService.findByEmail(email);
+            // Validate user existence by email
+            userService.findByEmail(email);
         } catch (UserNotFoundException _ex) {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
 
-
         String otpCode = CommonUtil.generateRandomString(otpConfig.getLength().getPasswordReset());
-        Otp otp = otpRequestMapper.execute(email, OtpAction.RESET_PASSWORD, otpCode, user, AppConstant.COMMUNICATION_CHANNEL_EMAIL);
+        Otp otp = otpRequestMapper.execute(email, OtpAction.RESET_PASSWORD, otpCode, AppConstant.COMMUNICATION_CHANNEL_EMAIL);
 
         otpService.create(otp);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(
+            security = {@SecurityRequirement(name = AppConstant.AUTH_STRATEGY_API_KEY)},
+            summary = "Reset Password")
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
+
+        String email = resetPasswordRequestDto.getEmail();
+        String code = resetPasswordRequestDto.getToken();
+
+        Otp otp = otpService.get(email, code);
+
+        if (otp == null) {
+            throw new InvalidOtpException();
+        }
+
+        boolean isOtpExpired = CommonUtil.checkExpiry(otp.getExpiredAt(), 1000);
+        if (isOtpExpired) {
+            throw new OtpExpiredException();
+        }
+
+        // Check otp status
+        if (otp.getStatus() != OtpStatus.NEW) {
+            throw new OtpAlreadyUsedException();
+        }
+
+
+
+        String newPassword = resetPasswordRequestDto.getNewPassword();
+        User user = userService.findByEmail(email);
+
+        boolean isSame = loginService.validatePassword(user.getPassword(), newPassword);
+        if (isSame) {
+            throw new PasswordConflictException();
+        }
+
+        // Update otp status
+        otp.setStatus(OtpStatus.VERIFIED);
+        otpService.update(otp);
+
+        userService.changePassword(user, newPassword);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
