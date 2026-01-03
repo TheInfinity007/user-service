@@ -52,53 +52,6 @@ Authentication Provider -Perform a specific type of authentiction, for example, 
 JwtAuthenticationProvider supports authenticating a JWT token
 
 
-POST /v1/users/forgot-password
-Initiates the password reset process.
-Request:
-{
-"email": "user@example.com"
-}
-Process:
-Validate email exists in system
-Generate a secure, time-limited token (e.g., UUID, expires in 15-30 minutes)
-Store token in database with user ID and expiration timestamp
-Send email with reset link: https://yourapp.com/reset-password?token=xyz123
-Return success response (even if email doesn't exist - security best practice)
-Response:
-{
-"message": "If the email exists, a password reset link has been sent"
-}
-Security Considerations:
-Don't reveal if email exists (prevents enumeration attacks)
-Token should be single-use
-Set short expiration (15-30 minutes)
-Use HTTPS for reset links
-<hr></hr>
-POST /v1/users/reset-password
-Completes the password reset using the token.
-Request:
-{
-  "token": "xyz123",
-  "newPassword": "NewSecurePass123!"
-}
-Process:
-Validate token exists and hasn't expired
-Validate token hasn't been used
-Validate password strength (use same rules as registration)
-Hash new password with PasswordEncoder
-Update user's password
-Mark token as used/delete it
-Optionally: Invalidate all existing sessions (force re-login)
-Send confirmation email
-Response:
-{
-  "message": "Password successfully reset"
-}
-Error Cases:
-Token expired → 400 Bad Request
-Invalid token → 400 Bad Request
-Weak password → 400 Bad Request
-<hr></hr>
 2. Email Verification Flow
 POST /v1/users/send-verification
 Sends/resends email verification link.
