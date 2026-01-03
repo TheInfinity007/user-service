@@ -1,8 +1,12 @@
-package com.theinfinity007.user_service.dao;
+package com.theinfinity007.user_service.dao.impl;
 
+import com.theinfinity007.user_service.dao.ApiKeyDao;
+import com.theinfinity007.user_service.dao.TokenDAO;
 import com.theinfinity007.user_service.entity.ApiKey;
+import com.theinfinity007.user_service.entity.Token;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

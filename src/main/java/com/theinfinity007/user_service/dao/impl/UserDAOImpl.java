@@ -1,5 +1,6 @@
-package com.theinfinity007.user_service.dao;
+package com.theinfinity007.user_service.dao.impl;
 
+import com.theinfinity007.user_service.dao.UserDAO;
 import com.theinfinity007.user_service.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -7,7 +8,7 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
 
     private final EntityManager entityManager;
 
