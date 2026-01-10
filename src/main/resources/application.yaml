@@ -46,6 +46,14 @@ application:
       defaultLength: 6
       passwordReset: 6
 
+  email:
+    baseUrl: "https://api.mailgun.net/v3/sandbox1ff18c4144284f1690ef5fd4552d991c.mailgun.org"
+    username: "api"
+    apiKey: ${EMAIL_API_KEY}
+    senderEmail: "sandbox1ff18c4144284f1690ef5fd4552d991c.mailgun.org"
+    localPart: "theinfinity007"
+    brandName: "User Service"
+
 # Display spring-bott-actuator in swagger
 springdoc:
   show-actuator: true

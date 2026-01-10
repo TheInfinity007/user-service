@@ -15,6 +15,7 @@ import com.theinfinity007.user_service.exception.*;
 import com.theinfinity007.user_service.mapper.request.OtpRequestMapper;
 import com.theinfinity007.user_service.mapper.request.UserRequestMapper;
 import com.theinfinity007.user_service.mapper.response.UserResponseMapper;
+import com.theinfinity007.user_service.service.EmailService;
 import com.theinfinity007.user_service.service.LoginService;
 import com.theinfinity007.user_service.service.OTPService;
 import com.theinfinity007.user_service.service.UserService;
@@ -42,6 +43,7 @@ public class UserController {
     private final UserService userService;
     private final LoginService loginService;
     private final OTPService otpService;
+    private final EmailService emailService;
     private final UserRequestMapper userRequestMapper;
     private final OtpRequestMapper otpRequestMapper;
     private final OtpConfig otpConfig;
@@ -183,10 +185,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
 
+        OtpAction action = OtpAction.RESET_PASSWORD;
         String otpCode = CommonUtil.generateRandomString(otpConfig.getLength().getPasswordReset());
-        Otp otp = otpRequestMapper.execute(email, OtpAction.RESET_PASSWORD, otpCode, AppConstant.COMMUNICATION_CHANNEL_EMAIL);
+        Otp otp = otpRequestMapper.execute(email, action, otpCode, AppConstant.COMMUNICATION_CHANNEL_EMAIL);
 
         otpService.create(otp);
+        emailService.send(email, action, otpCode);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
