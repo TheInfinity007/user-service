@@ -1,9 +1,6 @@
 package com.theinfinity007.user_service.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +10,7 @@ import lombok.Setter;
         @Index(name = "idx_type_code_lang_unique", columnList = "type,code,lang", unique = true)
 })
 @Entity
-public class Templates extends BaseEntity {
+public class Template extends BaseEntity {
 
     @Column(name = "type", nullable = false)
     private String type;
@@ -27,6 +24,7 @@ public class Templates extends BaseEntity {
     @Column(name = "subject", nullable = false)
     private String subject;
 
-    @Column(name = "text", nullable = false)
+    @Lob
+    @Column(name = "text", nullable = false, columnDefinition = "LONGTEXT")
     private String text;
 }

@@ -11,7 +11,7 @@ public class ExpiryConfig {
 
     public int getExpiryByAction(OtpAction action) {
         return switch (action) {
-            case OtpAction.RESET_PASSWORD -> passwordReset;
+            case OtpAction.FORGOT_PASSWORD -> passwordReset;
             default -> defaultExpiry;
         };
     }

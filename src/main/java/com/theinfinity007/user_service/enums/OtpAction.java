@@ -1,7 +1,7 @@
 package com.theinfinity007.user_service.enums;
 
 public enum OtpAction {
-    RESET_PASSWORD;
+    FORGOT_PASSWORD;
 
     @Override
     public String toString() {

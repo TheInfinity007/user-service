@@ -36,7 +36,7 @@ application:
       url-pattern: "${security.permitted.url-pattern:/swagger-ui/**,/v3/api-docs/**,/actuator/**}"
     anonymous:
       access-route:
-        "POST:v1/apikeys"
+        "POST:/v1/apikeys"
 
   otp:
     expiry:

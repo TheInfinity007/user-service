@@ -7,6 +7,7 @@ public class AppConstant {
     public static final String AUTH_STRATEGY_API_KEY = "api_key";
     public static final String AUTH_STRATEGY_OAUTH = "oauth";
     public static final String COMMUNICATION_CHANNEL_EMAIL = "email";
+    public static final String TEMPLATE_TYPE_EMAIL = "EMAIL";
 
     private AppConstant(){} // private constructor so that no once can initialize even by mistake
 }

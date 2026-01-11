@@ -22,7 +22,7 @@ public class BaseEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = COLUMN_NAME_CREATED_AT, nullable = false, updatable = false)
+    @Column(name = COLUMN_NAME_CREATED_AT, nullable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     @CreatedDate
     private Date createdAt;
 

@@ -8,6 +8,8 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonUtil {
 
@@ -57,5 +59,16 @@ public class CommonUtil {
 
     public static boolean checkExpiry(Date incomingValue, int gracePeriodInMs) {
         return System.currentTimeMillis() > (incomingValue.getTime() + gracePeriodInMs);
+    }
+
+    public static String getInterpolatedString(String str, Map<String, String> map) {
+
+        Pattern pattern = Pattern.compile("\\{(\\w+)\\}");
+        Matcher matcher = pattern.matcher(str);
+
+        return matcher.replaceAll((match) -> {
+            String key = match.group(1);
+            return map.getOrDefault(key, match.group());
+        });
     }
 }

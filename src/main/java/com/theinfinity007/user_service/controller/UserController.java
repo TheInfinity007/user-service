@@ -185,12 +185,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
 
-        OtpAction action = OtpAction.RESET_PASSWORD;
+        OtpAction action = OtpAction.FORGOT_PASSWORD;
         String otpCode = CommonUtil.generateRandomString(otpConfig.getLength().getPasswordReset());
         Otp otp = otpRequestMapper.execute(email, action, otpCode, AppConstant.COMMUNICATION_CHANNEL_EMAIL);
 
         otpService.create(otp);
-        emailService.send(email, action, otpCode);
+        emailService.send(email, action, otpCode, forgotPasswordRequestDto.getLang());
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -219,8 +219,6 @@ public class UserController {
         if (otp.getStatus() != OtpStatus.NEW) {
             throw new OtpAlreadyUsedException();
         }
-
-
 
         String newPassword = resetPasswordRequestDto.getNewPassword();
         User user = userService.findByEmail(email);

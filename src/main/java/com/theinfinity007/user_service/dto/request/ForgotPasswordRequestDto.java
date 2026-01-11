@@ -7,4 +7,6 @@ import lombok.Data;
 public class ForgotPasswordRequestDto {
     @NotBlank(message = "is required and must not be blank")
     private String email;
+
+    private String lang = "en";
 }

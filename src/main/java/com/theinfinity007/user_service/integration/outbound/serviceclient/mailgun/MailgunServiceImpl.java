@@ -27,7 +27,7 @@ public class MailgunServiceImpl implements EmailProvider {
     private final EmailConfig emailConfig;
     private final Log logger = LogFactory.getLog(getClass());
 
-    public String sendSimpleMessage(String receipientEmail, String otpCode) {
+    public String send(String receipientEmail, String subject, String html, String from, String text) {
 
         Map<String, String> headers = new HashMap<>();
         Map<String, String> queryParams = new HashMap<>();
@@ -35,10 +35,11 @@ public class MailgunServiceImpl implements EmailProvider {
         String path = "/messages";
         String baseUrl = emailConfig.getBaseUrl();
 
-        queryParams.put("from", emailConfig.getBrandName() + " <" + emailConfig.getLocalPart() + "@" + emailConfig.getSenderEmail() + ">");
+        queryParams.put("from", from);
         queryParams.put("to", receipientEmail);
-        queryParams.put("subject", "Reset Password");
-        queryParams.put("text", "You OTP for password reset is " + otpCode);
+        queryParams.put("subject", subject);
+        queryParams.put("html", html);
+        queryParams.put("text", text);
 
         URI uri = URI.create(baseUrl + path);
 
@@ -48,7 +49,7 @@ public class MailgunServiceImpl implements EmailProvider {
             return "Response sent successfully";
         } catch(HttpClientErrorException | HttpServerErrorException e){
             logger.error("Mailgun Service Http Error: " + e.getStatusCode() + " Response: " + e.getResponseBodyAsString(), e);
-            throw new UserServiceException(HttpStatus.FAILED_DEPENDENCY.getReasonPhrase(), "Mailgun Service Error: " + e.getMessage(), HttpStatus.FAILED_DEPENDENCY.value());
+            throw new UserServiceException(HttpStatus.FAILED_DEPENDENCY, "Mailgun Service Error: " + e.getMessage());
         } catch (Exception e) {
             logger.error("Error in Mailgun Service: " + e.getMessage() + " Exception Type: " + e.getClass().getName(), e);
             throw e;
